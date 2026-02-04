@@ -13,6 +13,9 @@
     .responsive-img { width: 100%; max-width: 800px; max-height: 640px; height: auto; object-fit: contain; display: block; margin: 0; }
     .parts-row { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
     .parts-col { flex: 1 1 380px; min-width: 320px; }
+    .top-grid { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+    .top-left { flex: 0 0 320px; min-width: 320px; }
+    .top-right { flex: 1 1 auto; min-width: 320px; }
     .muted { color: #555; font-size: 0.9em; }
     .warn { color: #b00020; }
     .eq-row { display: flex; align-items: center; gap: 6px; margin: 6px 0; flex-wrap: wrap; }
@@ -40,11 +43,12 @@
   </div>
 
   <div id="status" class="card muted"></div>
-  <div id="values" class="card"></div>
-
-  <div class="card">
-    <div><b id="lbl-circuit">Gesamtschaltung</b></div>
-    <img id="schematic" class="responsive-img" alt="Schaltplan" />
+  <div class="top-grid">
+    <div id="values" class="card top-left"></div>
+    <div class="card top-right">
+      <div><b id="lbl-circuit">Gesamtschaltung</b></div>
+      <img id="schematic" class="responsive-img" alt="Schaltplan" />
+    </div>
   </div>
 
   <div id="tasks" class="card"></div>
