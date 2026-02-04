@@ -24,7 +24,14 @@
 <body>
   <h2 id="main-title">Übung: Komplexe Wechselstromrechnung - Zeigerdiagramm [... loading ...]</h2>
   <div class="row">
-    <label class="label">Seed (7 Stellen):</label>
+    <label class="label" id="lbl-lang">Sprache:</label>
+    <select id="lang">
+      <option value="de">Deutsch</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+  <div class="row">
+    <label class="label" id="lbl-seed">Seed (7 Stellen):</label>
     <input id="seed" autocomplete="off" />
     <button id="gen-seed">Generieren (Seed)</button>
     <button id="gen-default">Generieren (Default)</button>
@@ -40,14 +47,14 @@
   <div id="inputs-polar" class="card" style="display:none"></div>
 
   <div class="row">
-    <label class="label">Schaltung ist:</label>
-    <label><input type="radio" name="nature" value="induktiv"> induktiv</label>
-    <label><input type="radio" name="nature" value="kapazitiv"> kapazitiv</label>
+    <label class="label" id="lbl-nature">Schaltung ist:</label>
+    <label><input type="radio" name="nature" value="induktiv"> <span id="lbl-inductive">induktiv</span></label>
+    <label><input type="radio" name="nature" value="kapazitiv"> <span id="lbl-capacitive">kapazitiv</span></label>
   </div>
   <button id="check">Prüfen</button>
 
   <div class="card">
-    <div class="section-title">Leeres Zeigerdiagramm</div>
+    <div class="section-title" id="lbl-blank-title">Leeres Zeigerdiagramm</div>
     <img id="blank" class="responsive-img" />
   </div>
 

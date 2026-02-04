@@ -1,13 +1,107 @@
 ﻿const TOPO_JSON = "../superposition_topologies_50_clean/topologies.json";
-const BASE_TITLE = "Übung: Überlagerungssatz";
+const I18N = {
+  de: {
+    title: "Übung: Überlagerungssatz",
+    loading: "[... loading ...]",
+    lang: "Sprache:",
+    seedPlaceholder: "leer = random",
+    genSeed: "Generieren (Seed)",
+    genRandom: "Generieren (Random)",
+    check: "Prüfen",
+    seed: "Seed:",
+    circuit: "Gesamtschaltung",
+    inputs: "Eingaben",
+    partials: "Teilschaltung 1 (links) und Teilschaltung 2 (rechts)",
+    partialVoltage: "Teilspannung",
+    partialCurrent: "Teilstrom",
+    totalVoltage: "Gesamtspannung",
+    totalCurrent: "Gesamtstrom",
+    valuesSources: "Quellen",
+    valuesResistors: "Widerstände",
+    tasks: "Aufgaben",
+    checkOk: "Alle Eingaben innerhalb 1% Toleranz.",
+    checkBad: "Mindestens eine Eingabe ist außerhalb 1% Toleranz.",
+    loadingTopo: "Lade Topologien ...",
+    noTopo: "Keine Topologien gefunden.",
+    error: "Fehler",
+    partialImagesMissing: "Teilbilder fehlen in topologies.json (part_png_v / part_png_i).",
+    solutionTitle: "Musterlösung Überlagerungssatz",
+    resultsTitle: "Berechnete Spannungen und Ströme",
+    only: "nur",
+    active: "aktiv",
+    totalShort: "Gesamt",
+  },
+  en: {
+    title: "Exercise: Superposition Theorem",
+    loading: "[... loading ...]",
+    lang: "Language:",
+    seedPlaceholder: "empty = random",
+    genSeed: "Generate (Seed)",
+    genRandom: "Generate (Random)",
+    check: "Check",
+    seed: "Seed:",
+    circuit: "Complete circuit",
+    inputs: "Inputs",
+    partials: "Partial circuit 1 (left) and partial circuit 2 (right)",
+    partialVoltage: "Partial voltage",
+    partialCurrent: "Partial current",
+    totalVoltage: "Total voltage",
+    totalCurrent: "Total current",
+    valuesSources: "Sources",
+    valuesResistors: "Resistors",
+    tasks: "Tasks",
+    checkOk: "All inputs are within 1% tolerance.",
+    checkBad: "At least one input is outside 1% tolerance.",
+    loadingTopo: "Loading topologies ...",
+    noTopo: "No topologies found.",
+    error: "Error",
+    partialImagesMissing: "Partial images are missing in topologies.json (part_png_v / part_png_i).",
+    solutionTitle: "Worked solution (superposition)",
+    resultsTitle: "Calculated voltages and currents",
+    only: "only",
+    active: "active",
+    totalShort: "Total",
+  },
+};
+let LANG = localStorage.getItem("lang") || "de";
+if (!I18N[LANG]) LANG = "de";
+let BASE_TITLE = I18N[LANG].title;
+
+function tr(key) {
+  return (I18N[LANG] && I18N[LANG][key]) || I18N.de[key] || key;
+}
 
 let CURRENT = null;
 
 function setLoadingTitle(isLoading) {
-  const t = isLoading ? `${BASE_TITLE} [... loading ...]` : BASE_TITLE;
+  const t = isLoading ? `${BASE_TITLE} ${tr("loading")}` : BASE_TITLE;
   document.title = t;
   const h = document.getElementById("main-title");
   if (h) h.textContent = t;
+}
+
+function applyLanguageUI() {
+  document.documentElement.lang = LANG;
+  BASE_TITLE = tr("title");
+  const l = document.getElementById("lbl-lang");
+  if (l) l.textContent = tr("lang");
+  const seed = document.getElementById("seed");
+  if (seed) seed.placeholder = tr("seedPlaceholder");
+  const bSeed = document.getElementById("gen-seed");
+  if (bSeed) bSeed.textContent = tr("genSeed");
+  const bRandom = document.getElementById("gen-random");
+  if (bRandom) bRandom.textContent = tr("genRandom");
+  const bCheck = document.getElementById("check");
+  if (bCheck) bCheck.textContent = tr("check");
+  const c = document.getElementById("lbl-circuit");
+  if (c) c.textContent = tr("circuit");
+  const i = document.getElementById("lbl-inputs");
+  if (i) i.textContent = tr("inputs");
+  const p = document.getElementById("lbl-parts");
+  if (p) p.textContent = tr("partials");
+  const sl = document.getElementById("lbl-seed");
+  if (sl) sl.textContent = tr("seed");
+  setLoadingTitle(false);
 }
 
 function mulberry32(a) {
@@ -71,8 +165,8 @@ function generateValues(seed, topo) {
 function renderInputs(mode, targetId) {
   const sym = mode === "I" ? "I" : "V";
   const unit = mode === "I" ? "A" : "V";
-  const kindPart = mode === "I" ? "Teilstrom" : "Teilspannung";
-  const kindTotal = mode === "I" ? "Gesamtstrom" : "Gesamtspannung";
+  const kindPart = mode === "I" ? tr("partialCurrent") : tr("partialVoltage");
+  const kindTotal = mode === "I" ? tr("totalCurrent") : tr("totalVoltage");
 
   document.getElementById("lbl-p1").innerHTML = `${kindPart} ${sym}<sub>${targetId},1</sub> [${unit}]:`;
   document.getElementById("lbl-p2").innerHTML = `${kindPart} ${sym}<sub>${targetId},2</sub> [${unit}]:`;
@@ -319,13 +413,13 @@ function checkAnswers() {
 
   const st = document.getElementById("check-status");
   st.innerHTML = allOk
-    ? '<span style="color:#2e7d32">Alle Eingaben innerhalb 1% Toleranz.</span>'
-    : '<span style="color:#c62828">Mindestens eine Eingabe ist außerhalb 1% Toleranz.</span>';
+    ? `<span style="color:#2e7d32">${tr("checkOk")}</span>`
+    : `<span style="color:#c62828">${tr("checkBad")}</span>`;
 
   try {
     renderSolutionsAfterCheck();
   } catch (e) {
-    st.innerHTML += `<br><span style="color:#c62828">Anzeige der Musterlösung fehlgeschlagen: ${e}</span>`;
+    st.innerHTML += `<br><span style="color:#c62828">Error: ${e}</span>`;
   }
 }
 
@@ -349,16 +443,16 @@ function renderSolutionsAfterCheck() {
   document.getElementById("part2").src = p2Rel ? `../superposition_topologies_50_clean/${p2Rel}` : "";
   if (!p1Rel || !p2Rel) {
     const st = document.getElementById("check-status");
-    st.innerHTML += "<br><span style='color:#c62828'>Teilbilder fehlen in topologies.json (part_png_v / part_png_i).</span>";
+    st.innerHTML += `<br><span style='color:#c62828'>${tr("partialImagesMissing")}</span>`;
   }
 
-  const src1Lbl = s1 ? fmtIdx(s1) : "Quelle 1";
-  const src2Lbl = s2 ? fmtIdx(s2) : "Quelle 2";
+  const src1Lbl = s1 ? fmtIdx(s1) : (LANG === "en" ? "Source 1" : "Quelle 1");
+  const src2Lbl = s2 ? fmtIdx(s2) : (LANG === "en" ? "Source 2" : "Quelle 2");
   document.getElementById("solution").innerHTML =
-    `<b>Musterlösung Überlagerungssatz</b><br>` +
-    `${qsym},1 (nur ${src1Lbl} aktiv): <b>${fmtSI(expected.part1, unit)}</b><br>` +
-    `${qsym},2 (nur ${src2Lbl} aktiv): <b>${fmtSI(expected.part2, unit)}</b><br>` +
-    `${qsym} (Gesamt): <b>${fmtSI(expected.total, unit)}</b>`;
+    `<b>${tr("solutionTitle")}</b><br>` +
+    `${qsym},1 (${tr("only")} ${src1Lbl} ${tr("active")}): <b>${fmtSI(expected.part1, unit)}</b><br>` +
+    `${qsym},2 (${tr("only")} ${src2Lbl} ${tr("active")}): <b>${fmtSI(expected.part2, unit)}</b><br>` +
+    `${qsym} (${tr("totalShort")}): <b>${fmtSI(expected.total, unit)}</b>`;
 
   const ids = new Set([
     ...Object.keys(expected.full || {}),
@@ -377,7 +471,7 @@ function renderSolutionsAfterCheck() {
     return ia - ib;
   });
 
-  let html = "<b>Berechnete Spannungen und Ströme</b><br><br>";
+  let html = `<b>${tr("resultsTitle")}</b><br><br>`;
   html += '<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;">';
   html += '<tr><th>Element</th><th>V,1 [V]</th><th>I,1 [A]</th><th>V,2 [V]</th><th>I,2 [A]</th><th>V [V]</th><th>I [A]</th></tr>';
   for (const id of order) {
@@ -402,10 +496,10 @@ function renderCase(seed, db) {
   const srcTypes = (topo.sources || []).map((s) => s.type);
   const nV = srcTypes.filter((t) => t === "V").length;
   const nI = srcTypes.filter((t) => t === "I").length;
-  let srcMix = "Quellen";
-  if (nV === 2) srcMix = "2x V Quellen";
-  else if (nI === 2) srcMix = "2x I Quellen";
-  else if (nV === 1 && nI === 1) srcMix = "I+V Quellen";
+  let srcMix = LANG === "en" ? "sources" : "Quellen";
+  if (nV === 2) srcMix = LANG === "en" ? "2x V sources" : "2x V Quellen";
+  else if (nI === 2) srcMix = LANG === "en" ? "2x I sources" : "2x I Quellen";
+  else if (nV === 1 && nI === 1) srcMix = LANG === "en" ? "I+V sources" : "I+V Quellen";
   const imgRel = mode === "V" ? topo.png_v : topo.png_i;
   const vals = generateValues(seed, topo);
 
@@ -415,23 +509,31 @@ function renderCase(seed, db) {
   const rid = topo.target_resistor_id || "R3";
   const rlbl = fmtIdx(rid);
   const qname = mode === "I"
-    ? `den Strom I<sub>${rid},1</sub> beziehungsweise I<sub>${rid},2</sub> durch ${rlbl}`
-    : `die Spannung U<sub>${rid},1</sub> beziehungsweise U<sub>${rid},2</sub> über ${rlbl}`;
-  const partWord = mode === "I" ? "Teilströme" : "Teilspannungen";
+    ? (LANG === "en"
+      ? `the current I<sub>${rid},1</sub> and I<sub>${rid},2</sub> through ${rlbl}`
+      : `den Strom I<sub>${rid},1</sub> beziehungsweise I<sub>${rid},2</sub> durch ${rlbl}`)
+    : (LANG === "en"
+      ? `the voltage U<sub>${rid},1</sub> and U<sub>${rid},2</sub> across ${rlbl}`
+      : `die Spannung U<sub>${rid},1</sub> beziehungsweise U<sub>${rid},2</sub> über ${rlbl}`);
+  const partWord = mode === "I" ? (LANG === "en" ? "partial currents" : "Teilströme") : (LANG === "en" ? "partial voltages" : "Teilspannungen");
   const part1 = mode === "I" ? `I<sub>${rid},1</sub>` : `V<sub>${rid},1</sub>`;
   const part2 = mode === "I" ? `I<sub>${rid},2</sub>` : `V<sub>${rid},2</sub>`;
-  const overWord = mode === "I" ? "durch" : "über";
+  const overWord = mode === "I" ? (LANG === "en" ? "through" : "durch") : (LANG === "en" ? "across" : "über");
   const qsym = mode === "I" ? `I<sub>${rid}</sub>` : `V<sub>${rid}</sub>`;
-  const totalWord = mode === "I" ? "den Gesamtstrom" : "die Gesamtspannung";
+  const totalWord = mode === "I" ? (LANG === "en" ? "the total current" : "den Gesamtstrom") : (LANG === "en" ? "the total voltage" : "die Gesamtspannung");
 
   document.getElementById("status").innerHTML =
-    `Seed ${seed} → Topologie ${topo.topology_id} (${mode}-Aufgabe) (${srcMix})`;
-  document.getElementById("values").innerHTML = `<b>Quellen</b><br>${srcHtml}<br><br><b>Widerstände</b><br>${rHtml}`;
+    `Seed ${seed} → Topologie ${topo.topology_id} (${mode}${LANG === "en" ? " task" : "-Aufgabe"}) (${srcMix})`;
+  document.getElementById("values").innerHTML = `<b>${tr("valuesSources")}</b><br>${srcHtml}<br><br><b>${tr("valuesResistors")}</b><br>${rHtml}`;
   document.getElementById("tasks").innerHTML =
-    `<b>Aufgaben</b><br>` +
-    `1) Zeichne die zwei zu überlagernden Teilschaltungen. Beschrifte in beiden Teilschaltungen mindestens die Quellen und ${qname}.<br>` +
-    `2) Berechne für beide Teilschaltungen die ${partWord} ${part1} und ${part2} ${overWord} ${rlbl} (mit aktivierter Quelle 1 gilt ${part1}, mit aktivierter Quelle 2 gilt ${part2}).<br>` +
-    `3) Berechne ${totalWord} ${qsym} für die Gesamtschaltung durch Anwendung des Überlagerungssatzes.`;
+    `<b>${tr("tasks")}</b><br>` +
+    (LANG === "en"
+      ? `1) Draw the two superposed partial circuits. In both partial circuits, label at least the sources and ${qname}.<br>` +
+        `2) Compute for both partial circuits the ${partWord} ${part1} and ${part2} ${overWord} ${rlbl} (with source 1 active use ${part1}, with source 2 active use ${part2}).<br>` +
+        `3) Compute ${totalWord} ${qsym} for the full circuit using superposition.`
+      : `1) Zeichne die zwei zu überlagernden Teilschaltungen. Beschrifte in beiden Teilschaltungen mindestens die Quellen und ${qname}.<br>` +
+        `2) Berechne für beide Teilschaltungen die ${partWord} ${part1} und ${part2} ${overWord} ${rlbl} (mit aktivierter Quelle 1 gilt ${part1}, mit aktivierter Quelle 2 gilt ${part2}).<br>` +
+        `3) Berechne ${totalWord} ${qsym} für die Gesamtschaltung durch Anwendung des Überlagerungssatzes.`);
 
   document.getElementById("schematic").src = `../superposition_topologies_50_clean/${imgRel}`;
   document.getElementById("part1").src = "";
@@ -451,14 +553,26 @@ function renderCase(seed, db) {
 }
 
 async function init() {
+  applyLanguageUI();
   setLoadingTitle(true);
   const status = document.getElementById("status");
   try {
-    status.textContent = "Lade Topologien ...";
+    status.textContent = tr("loadingTopo");
     const res = await fetch(`${TOPO_JSON}?v=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
     const db = await res.json();
-    if (!db.items || !db.items.length) throw new Error("Keine Topologien gefunden.");
+    if (!db.items || !db.items.length) throw new Error(tr("noTopo"));
+
+    const langSel = document.getElementById("lang");
+    if (langSel) {
+      langSel.value = LANG;
+      langSel.onchange = () => {
+        LANG = langSel.value === "en" ? "en" : "de";
+        localStorage.setItem("lang", LANG);
+        applyLanguageUI();
+        if (CURRENT) renderCase(CURRENT.seed, db);
+      };
+    }
 
     document.getElementById("gen-seed").onclick = () => {
       const seed = parseSeed(document.getElementById("seed").value);
@@ -479,7 +593,7 @@ async function init() {
     renderCase(seed, db);
     setLoadingTitle(false);
   } catch (e) {
-    status.innerHTML = `<span class="warn">Fehler: ${e}</span>`;
+    status.innerHTML = `<span class="warn">${tr("error")}: ${e}</span>`;
     setLoadingTitle(false);
   }
 }

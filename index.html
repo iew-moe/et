@@ -8,6 +8,7 @@
     body { font-family: "Segoe UI", Arial, sans-serif; margin: 24px; background: #fafafa; color: #1f2328; }
     .card { max-width: 900px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; padding: 16px; }
     h1 { margin-top: 0; }
+    .row { display: flex; align-items: center; gap: 8px; margin: 0 0 14px 0; }
     ul { margin: 0; padding-left: 22px; }
     a { color: #0969da; text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -15,11 +16,59 @@
 </head>
 <body>
   <div class="card">
-    <h1>Übersicht Übungen</h1>
+    <div class="row">
+      <label for="lang" id="lbl-lang">Sprache:</label>
+      <select id="lang">
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <h1 id="title">Übersicht Übungen</h1>
     <ul>
-      <li><a href="web-rlc/">Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)</a></li>
-      <li><a href="web-superposition/">Übung: Überlagerungssatz (mehrere Quellen und R)</a></li>
+      <li><a id="lnk-rlc" href="web-rlc/">Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)</a></li>
+      <li><a id="lnk-super" href="web-superposition/">Übung: Überlagerungssatz (mehrere Quellen und R)</a></li>
     </ul>
   </div>
+
+  <script>
+    const I18N = {
+      de: {
+        pageTitle: "Übersicht Übungen",
+        lang: "Sprache:",
+        title: "Übersicht Übungen",
+        rlc: "Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)",
+        super: "Übung: Überlagerungssatz (mehrere Quellen und R)"
+      },
+      en: {
+        pageTitle: "Exercise Overview",
+        lang: "Language:",
+        title: "Exercise Overview",
+        rlc: "Exercise: AC Complex Calculations – Phasor Diagram (RLC)",
+        super: "Exercise: Superposition Theorem (multiple sources and R)"
+      }
+    };
+
+    let LANG = localStorage.getItem("lang") || "de";
+    if (!I18N[LANG]) LANG = "de";
+
+    function applyLang() {
+      const t = I18N[LANG];
+      document.documentElement.lang = LANG;
+      document.title = t.pageTitle;
+      document.getElementById("lbl-lang").textContent = t.lang;
+      document.getElementById("title").textContent = t.title;
+      document.getElementById("lnk-rlc").textContent = t.rlc;
+      document.getElementById("lnk-super").textContent = t.super;
+      document.getElementById("lang").value = LANG;
+    }
+
+    document.getElementById("lang").addEventListener("change", (e) => {
+      LANG = e.target.value === "en" ? "en" : "de";
+      localStorage.setItem("lang", LANG);
+      applyLang();
+    });
+
+    applyLang();
+  </script>
 </body>
 </html>

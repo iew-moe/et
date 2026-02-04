@@ -25,7 +25,15 @@
   <h2 id="main-title">Übung: Überlagerungssatz [... loading ...]</h2>
 
   <div class="row">
-    <label class="label">Seed:</label>
+    <label class="label" id="lbl-lang">Sprache:</label>
+    <select id="lang">
+      <option value="de">Deutsch</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label class="label" id="lbl-seed">Seed:</label>
     <input id="seed" autocomplete="off" placeholder="leer = random" />
     <button id="gen-seed">Generieren (Seed)</button>
     <button id="gen-random">Generieren (Random)</button>
@@ -35,14 +43,14 @@
   <div id="values" class="card"></div>
 
   <div class="card">
-    <div><b>Gesamtschaltung</b></div>
+    <div><b id="lbl-circuit">Gesamtschaltung</b></div>
     <img id="schematic" class="responsive-img" alt="Schaltplan" />
   </div>
 
   <div id="tasks" class="card"></div>
 
   <div class="card">
-    <div><b>Eingaben</b></div>
+    <div><b id="lbl-inputs">Eingaben</b></div>
     <div class="eq-row"><span class="eq-label" id="lbl-p1"></span><input id="in-p1" /></div>
     <div class="eq-row"><span class="eq-label" id="lbl-p2"></span><input id="in-p2" /></div>
     <div class="eq-row"><span class="eq-label" id="lbl-gt"></span><input id="in-gt" /></div>
@@ -51,7 +59,7 @@
   </div>
 
   <div class="card">
-    <div><b>Teilschaltung 1 (links) und Teilschaltung 2 (rechts)</b></div>
+    <div><b id="lbl-parts">Teilschaltung 1 (links) und Teilschaltung 2 (rechts)</b></div>
     <div class="parts-row">
       <div class="parts-col">
         <img id="part1" class="responsive-img" alt="Teilschaltung 1" />

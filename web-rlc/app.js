@@ -1,12 +1,100 @@
 ﻿let pyodide;
-const BASE_TITLE = 'Übung: Komplexe Wechselstromrechnung - Zeigerdiagramm';
-document.title = `${BASE_TITLE} [... loading ...]`;
+const I18N = {
+  de: {
+    title: '\u00dcbung: Komplexe Wechselstromrechnung - Zeigerdiagramm',
+    loading: '[... loading ...]',
+    lang: 'Sprache:',
+    seed: 'Seed (7 Stellen):',
+    seedPlaceholder: 'leer = random',
+    genSeed: 'Generieren (Seed)',
+    genDefault: 'Generieren (Default)',
+    genRandom: 'Generieren (Random)',
+    values: 'Schaltungswerte',
+    tasks: 'Aufgaben',
+    check: 'Pr\u00fcfen',
+    nature: 'Schaltung ist:',
+    inductive: 'induktiv',
+    capacitive: 'kapazitiv',
+    blank: 'Leeres Zeigerdiagramm',
+    zeiger: 'Zeigerwerte und Ergebnisse',
+    scale: 'Ma\u00dfstab:',
+    inputsCartesian: 'Eingaben (kartesisch)',
+    inputsPolar: 'Eingaben (polar)',
+    tableColSymbol: 'Gr\u00f6ße',
+    tableColCartesian: 'Kartesisch',
+    tableColPolar: 'Polar',
+    tableColUnit: 'Einheit',
+    error: 'Fehler',
+  },
+  en: {
+    title: 'Exercise: AC Complex Calculation - Phasor Diagram',
+    loading: '[... loading ...]',
+    lang: 'Language:',
+    seed: 'Seed (7 digits):',
+    seedPlaceholder: 'empty = random',
+    genSeed: 'Generate (Seed)',
+    genDefault: 'Generate (Default)',
+    genRandom: 'Generate (Random)',
+    values: 'Circuit values',
+    tasks: 'Tasks',
+    check: 'Check',
+    nature: 'Circuit is:',
+    inductive: 'inductive',
+    capacitive: 'capacitive',
+    blank: 'Empty phasor diagram',
+    zeiger: 'Phasor values and results',
+    scale: 'Scale:',
+    inputsCartesian: 'Inputs (cartesian)',
+    inputsPolar: 'Inputs (polar)',
+    tableColSymbol: 'Symbol',
+    tableColCartesian: 'Cartesian',
+    tableColPolar: 'Polar',
+    tableColUnit: 'Unit',
+    error: 'Error',
+  }
+};
+let LANG = localStorage.getItem('lang') || 'de';
+if (!I18N[LANG]) LANG = 'de';
+let BASE_TITLE = I18N[LANG].title;
+document.title = `${BASE_TITLE} ${I18N[LANG].loading}`;
+
+function tr(k) {
+  return (I18N[LANG] && I18N[LANG][k]) || I18N.de[k] || k;
+}
 
 function setLoadingTitle(isLoading) {
-  const t = isLoading ? `${BASE_TITLE} [... loading ...]` : BASE_TITLE;
+  BASE_TITLE = tr('title');
+  const t = isLoading ? `${BASE_TITLE} ${tr('loading')}` : BASE_TITLE;
   document.title = t;
   const h = document.getElementById('main-title');
   if (h) h.textContent = t;
+}
+
+function applyLanguageUI() {
+  document.documentElement.lang = LANG;
+  const l = document.getElementById('lbl-lang');
+  if (l) l.textContent = tr('lang');
+  const s = document.getElementById('lbl-seed');
+  if (s) s.textContent = tr('seed');
+  const seed = document.getElementById('seed');
+  if (seed) seed.placeholder = tr('seedPlaceholder');
+  const b1 = document.getElementById('gen-seed');
+  const b2 = document.getElementById('gen-default');
+  const b3 = document.getElementById('gen-random');
+  if (b1) b1.textContent = tr('genSeed');
+  if (b2) b2.textContent = tr('genDefault');
+  if (b3) b3.textContent = tr('genRandom');
+  const bn = document.getElementById('lbl-nature');
+  if (bn) bn.textContent = tr('nature');
+  const ind = document.getElementById('lbl-inductive');
+  const cap = document.getElementById('lbl-capacitive');
+  if (ind) ind.textContent = tr('inductive');
+  if (cap) cap.textContent = tr('capacitive');
+  const blank = document.getElementById('lbl-blank-title');
+  if (blank) blank.textContent = tr('blank');
+  const check = document.getElementById('check');
+  if (check) check.textContent = tr('check');
+  setLoadingTitle(false);
 }
 
 function fmtEngSI(x, unit) {
@@ -75,7 +163,7 @@ function renderInputs(data) {
   const i1 = `<u>I</u><sub>${data.tags.i1}</sub>`;
   const i2 = `<u>I</u><sub>${data.tags.i2}</sub>`;
 
-  cart.innerHTML = `<div class="section-title">Eingaben (kartesisch)</div>`;
+  cart.innerHTML = `<div class="section-title">${tr('inputsCartesian')}</div>`;
   cart.appendChild(rowCartesian('<u>Z</u><sub>C</sub>', 'zc_re', 'zc_im', 'Ohm'));
   cart.appendChild(rowCartesian('<u>Z</u><sub>L</sub>', 'zl_re', 'zl_im', 'Ohm'));
   cart.appendChild(rowCartesian(zxy, 'zpar_re', 'zpar_im', 'Ohm'));
@@ -87,7 +175,7 @@ function renderInputs(data) {
   cart.appendChild(rowCartesian(i2, 'i2_re', 'i2_im', 'A'));
   cart.appendChild(rowCartesian('<u>S</u>', 's_re', 's_im', 'VA'));
 
-  polar.innerHTML = `<div class="section-title">Eingaben (polar)</div>`;
+  polar.innerHTML = `<div class="section-title">${tr('inputsPolar')}</div>`;
   polar.appendChild(rowPolar('<u>Z</u><sub>C</sub>', 'zc_mag', 'zc_phase', 'Ohm'));
   polar.appendChild(rowPolar('<u>Z</u><sub>L</sub>', 'zl_mag', 'zl_phase', 'Ohm'));
   polar.appendChild(rowPolar(zxy, 'zpar_mag', 'zpar_phase', 'Ohm'));
@@ -104,6 +192,7 @@ function renderInputs(data) {
 }
 
 async function init() {
+  applyLanguageUI();
   pyodide = await loadPyodide();
   await pyodide.loadPackage(['matplotlib']);
   const code = await (await fetch(`../rlc_core.py?v=${Date.now()}`)).text();
@@ -113,6 +202,16 @@ async function init() {
   document.getElementById('gen-default').onclick = () => generateWithMode('default');
   document.getElementById('gen-random').onclick = () => generateWithMode('random');
   document.getElementById('check').onclick = check;
+  const langSel = document.getElementById('lang');
+  if (langSel) {
+    langSel.value = LANG;
+    langSel.onchange = async () => {
+      LANG = langSel.value === 'en' ? 'en' : 'de';
+      localStorage.setItem('lang', LANG);
+      applyLanguageUI();
+      await generateWithMode('seed');
+    };
+  }
   // Always start with a fresh random seed on page load.
   document.getElementById('seed').value = '';
   await generateWithMode('random');
@@ -129,14 +228,14 @@ async function generateWithMode(mode = 'seed') {
     seed = '';
   }
   const valuesEl = document.getElementById('values');
-  valuesEl.innerHTML = '<b>Schaltungswerte</b><br>...';
+  valuesEl.innerHTML = `<b>${tr('values')}</b><br>...`;
 
   let data;
   try {
-    const result = await pyodide.runPythonAsync(`import json; json.dumps(generate(${JSON.stringify(seed)}))`);
+    const result = await pyodide.runPythonAsync(`import json; json.dumps(generate(${JSON.stringify(seed)}, ${JSON.stringify(LANG)}))`);
     data = JSON.parse(result);
   } catch (e) {
-    valuesEl.innerHTML = `<b>Fehler:</b> ${e}`;
+    valuesEl.innerHTML = `<b>${tr('error')}:</b> ${e}`;
     throw e;
   } finally {
     setLoadingTitle(false);
@@ -144,7 +243,7 @@ async function generateWithMode(mode = 'seed') {
 
   document.getElementById('seed').value = data.seed;
   valuesEl.innerHTML = `
-    <b>Schaltungswerte</b><br>
+    <b>${tr('values')}</b><br>
     <i>R</i> = ${data.values.R}<br>
     <i>L</i> = ${data.values.L}<br>
     <i>C</i> = ${data.values.C}<br>
@@ -153,17 +252,19 @@ async function generateWithMode(mode = 'seed') {
   `;
 
   document.getElementById('schematic').src = `../schematics/${data.schematic}`;
-  document.getElementById('tasks').innerHTML = '<b>Aufgaben</b><br>' + data.tasks.join('<br>');
-  document.getElementById('scale').innerHTML = `<b>Maßstab:</b> ${fmtEngSI(data.scale.Vstep, 'V')}/Kästchen, ${fmtEngSI(data.scale.Istep, 'A')}/Kästchen`;
+  document.getElementById('tasks').innerHTML = `<b>${tr('tasks')}</b><br>` + data.tasks.join('<br>');
+  const cellWord = LANG === 'en' ? 'grid' : 'Kästchen';
+  document.getElementById('scale').innerHTML = `<b>${tr('scale')}</b> ${fmtEngSI(data.scale.Vstep, 'V')}/${cellWord}, ${fmtEngSI(data.scale.Istep, 'A')}/${cellWord}`;
   document.getElementById('phasor').src = `data:image/png;base64,${data.phasor_png}`;
   document.getElementById('blank').src = `data:image/png;base64,${data.blank_png}`;
   const z = data.zeiger || [];
-  let html = "<b>Zeigerwerte und Ergebnisse</b><br><table style='border-collapse:collapse'>";
-  html += "<tr><th style='text-align:left;padding-right:12px'>Größe</th><th style='text-align:left;padding-right:12px'>Kartesisch</th><th style='text-align:left;padding-right:12px'>Polar</th><th style='text-align:left'>Einheit</th></tr>";
+  let html = `<b>${tr('zeiger')}</b><br><table style='border-collapse:collapse'>`;
+  html += `<tr><th style='text-align:left;padding-right:12px'>${tr('tableColSymbol')}</th><th style='text-align:left;padding-right:12px'>${tr('tableColCartesian')}</th><th style='text-align:left;padding-right:12px'>${tr('tableColPolar')}</th><th style='text-align:left'>${tr('tableColUnit')}</th></tr>`;
   for (const row of z) {
     html += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td></tr>`;
   }
-  html += "</table><div>Schaltung ist " + data.nature + "</div>";
+  const nat = data.nature === 'kapazitiv' ? tr('capacitive') : tr('inductive');
+  html += `</table><div>${tr('nature')} ${nat}</div>`;
   document.getElementById('solution').innerHTML = html;
 
   renderInputs(data);

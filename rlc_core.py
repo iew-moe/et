@@ -421,7 +421,7 @@ def draw_phasor(vectors):
 
 # ---------- generate / check ----------
 
-def generate(seed_text=''):
+def generate(seed_text='', lang='de'):
     if seed_text.isdigit():
         if len(seed_text) == 7:
             base_seed = int(seed_text)
@@ -494,20 +494,35 @@ def generate(seed_text=''):
         v1 = i2 * Z[s1]
         v2 = i2 * Z[s2]
 
-    mode_text = 'kartesischer Form' if mode == 0 else 'Polarform'
-
-    tasks = [
-        f"Geben Sie alle Ergebnisse in {mode_text} an.",
-        "1) Berechne <u>Z</u><sub>C</sub>.",
-        "2) Berechne <u>Z</u><sub>L</sub>.",
-        f"3) {task1}",
-        "4) Berechne die Gesamtimpedanz <u>Z</u>.",
-        "5) Berechne den Strom <u>I</u>.",
-        f"6) Berechne die beiden Teilspannungen <u>V</u><sub>{v1_tag}</sub> und <u>V</u><sub>{v2_tag}</sub>.",
-        f"7) Berechne die beiden Teilströme <u>I</u><sub>{i1_tag}</sub> und <u>I</u><sub>{i2_tag}</sub>.",
-        "8) Ist diese RLC Schaltung bei f induktiv oder kapazitiv?",
-        "9) Berechne die komplexe Scheinleistung <u>S</u>."
-    ]
+    if lang == 'en':
+        mode_text = 'cartesian form' if mode == 0 else 'polar form'
+        task1_en = task1.replace("Berechne ", "Compute ")
+        tasks = [
+            f"Provide all results in {mode_text}.",
+            "1) Compute <u>Z</u><sub>C</sub>.",
+            "2) Compute <u>Z</u><sub>L</sub>.",
+            f"3) {task1_en}",
+            "4) Compute the total impedance <u>Z</u>.",
+            "5) Compute the source current <u>I</u>.",
+            f"6) Compute the two partial voltages <u>V</u><sub>{v1_tag}</sub> and <u>V</u><sub>{v2_tag}</sub>.",
+            f"7) Compute the two partial currents <u>I</u><sub>{i1_tag}</sub> and <u>I</u><sub>{i2_tag}</sub>.",
+            "8) At frequency f, is this RLC circuit inductive or capacitive?",
+            "9) Compute the complex apparent power <u>S</u>."
+        ]
+    else:
+        mode_text = 'kartesischer Form' if mode == 0 else 'Polarform'
+        tasks = [
+            f"Geben Sie alle Ergebnisse in {mode_text} an.",
+            "1) Berechne <u>Z</u><sub>C</sub>.",
+            "2) Berechne <u>Z</u><sub>L</sub>.",
+            f"3) {task1}",
+            "4) Berechne die Gesamtimpedanz <u>Z</u>.",
+            "5) Berechne den Strom <u>I</u>.",
+            f"6) Berechne die beiden Teilspannungen <u>V</u><sub>{v1_tag}</sub> und <u>V</u><sub>{v2_tag}</sub>.",
+            f"7) Berechne die beiden Teilströme <u>I</u><sub>{i1_tag}</sub> und <u>I</u><sub>{i2_tag}</sub>.",
+            "8) Ist diese RLC Schaltung bei f induktiv oder kapazitiv?",
+            "9) Berechne die komplexe Scheinleistung <u>S</u>."
+        ]
 
     if res['type'] == 'series_parallel':
         s = res['series']
