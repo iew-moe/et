@@ -224,9 +224,10 @@ function buildAndSolve(topo, values, activeSourceId = null) {
     }
 
     if (e.kind === "I") {
-      // current source positive from a -> b
-      if (ia >= 0) z[ia] -= e.value;
-      if (ib >= 0) z[ib] += e.value;
+      // Vorzeichenkorrektur wie offline/lcapy:
+      // Quellenwert wird mit invertierter Richtung in die KCL eingebracht.
+      if (ia >= 0) z[ia] += e.value;
+      if (ib >= 0) z[ib] -= e.value;
       continue;
     }
 
@@ -251,7 +252,7 @@ function buildAndSolve(topo, values, activeSourceId = null) {
     const v = va - vb;
     let i = 0;
     if (e.kind === "R") i = v / e.value;
-    else if (e.kind === "I") i = e.value;
+    else if (e.kind === "I") i = -e.value;
     else if (e.kind === "V") i = x[idxV.get(e.id)] || 0;
     vals[e.id] = { V: v, I: i };
   }
