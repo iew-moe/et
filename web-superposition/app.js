@@ -432,7 +432,10 @@ function renderSolutionsAfterCheck() {
   if (!CURRENT || !CURRENT.expected) return;
   const { topo, mode, targetId, expected } = CURRENT;
   const rid = targetId;
-  const qsym = mode === "I" ? `I<sub>${rid}</sub>` : `V<sub>${rid}</sub>`;
+  const baseSym = mode === "I" ? "I" : "V";
+  const qsym1 = `${baseSym}<sub>${rid},1</sub>`;
+  const qsym2 = `${baseSym}<sub>${rid},2</sub>`;
+  const qsym = `${baseSym}<sub>${rid}</sub>`;
   const unit = mode === "I" ? "A" : "V";
 
   const srcIds = expected.srcIds || [];
@@ -450,8 +453,8 @@ function renderSolutionsAfterCheck() {
   const src2Lbl = s2 ? fmtIdx(s2) : (LANG === "en" ? "Source 2" : "Quelle 2");
   document.getElementById("solution").innerHTML =
     `<b>${tr("solutionTitle")}</b><br>` +
-    `${qsym},1 (${tr("only")} ${src1Lbl} ${tr("active")}): <b>${fmtSI(expected.part1, unit)}</b><br>` +
-    `${qsym},2 (${tr("only")} ${src2Lbl} ${tr("active")}): <b>${fmtSI(expected.part2, unit)}</b><br>` +
+    `${qsym1} (${tr("only")} ${src1Lbl} ${tr("active")}): <b>${fmtSI(expected.part1, unit)}</b><br>` +
+    `${qsym2} (${tr("only")} ${src2Lbl} ${tr("active")}): <b>${fmtSI(expected.part2, unit)}</b><br>` +
     `${qsym} (${tr("totalShort")}): <b>${fmtSI(expected.total, unit)}</b>`;
 
   const ids = new Set([
