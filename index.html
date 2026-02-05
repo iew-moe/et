@@ -12,6 +12,7 @@
     ul { margin: 0; padding-left: 22px; }
     a { color: #0969da; text-decoration: none; }
     a:hover { text-decoration: underline; }
+    .footer { margin-top: 16px; font-size: 0.9rem; color: #57606a; }
   </style>
 </head>
 <body>
@@ -25,9 +26,19 @@
     </div>
     <h1 id="title">Übersicht Übungen</h1>
     <ul>
+      <li><a id="lnk-leiter" href="web-leiter/">Übung: Elektrischer Leiter</a></li>
+      <li><a id="lnk-ps" href="web-parallel-series/">Übung: Reihen- und Parallelschaltung</a></li>
       <li><a id="lnk-rlc" href="web-rlc/">Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)</a></li>
       <li><a id="lnk-super" href="web-superposition/">Übung: Überlagerungssatz (mehrere Quellen und R)</a></li>
     </ul>
+    <div class="footer">
+      © 2026 Stefan Mönch – CC BY-NC 4.0 ·
+      <a href="https://github.com/iew-moe/et" target="_blank" rel="noopener noreferrer">
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+             alt="GitHub Repo" width="18" height="18" style="vertical-align: middle;" />
+        GitHub
+      </a>
+    </div>
   </div>
 
   <script>
@@ -36,6 +47,8 @@
         pageTitle: "Übersicht Übungen",
         lang: "Sprache:",
         title: "Übersicht Übungen",
+        leiter: "Übung: Elektrischer Leiter",
+        ps: "Übung: Reihen- und Parallelschaltung",
         rlc: "Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)",
         super: "Übung: Überlagerungssatz (mehrere Quellen und R)"
       },
@@ -43,6 +56,8 @@
         pageTitle: "Exercise Overview",
         lang: "Language:",
         title: "Exercise Overview",
+        leiter: "Exercise: Electrical Conductor",
+        ps: "Exercise: Series and Parallel Circuits",
         rlc: "Exercise: AC Complex Calculations – Phasor Diagram (RLC)",
         super: "Exercise: Superposition Theorem (multiple sources and R)"
       }
@@ -57,6 +72,8 @@
       document.title = t.pageTitle;
       document.getElementById("lbl-lang").textContent = t.lang;
       document.getElementById("title").textContent = t.title;
+      document.getElementById("lnk-leiter").textContent = t.leiter;
+      document.getElementById("lnk-ps").textContent = t.ps;
       document.getElementById("lnk-rlc").textContent = t.rlc;
       document.getElementById("lnk-super").textContent = t.super;
       document.getElementById("lang").value = LANG;

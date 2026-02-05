@@ -590,6 +590,7 @@ async function init() {
     };
 
     document.getElementById("check").onclick = checkAnswers;
+    hookEnterCheck(checkAnswers);
 
     const seed = parseSeed("");
     document.getElementById("seed").value = String(seed);
@@ -599,6 +600,19 @@ async function init() {
     status.innerHTML = `<span class="warn">${tr("error")}: ${e}</span>`;
     setLoadingTitle(false);
   }
+}
+
+function hookEnterCheck(fn) {
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const t = e.target;
+    if (!t) return;
+    const tag = (t.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "select" || tag === "textarea") {
+      e.preventDefault();
+      fn();
+    }
+  });
 }
 
 init();

@@ -1,0 +1,64 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Übung: Reihen- und Parallelschaltung</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 20px; background: #fafafa; }
+    .row { display: flex; gap: 8px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .label { width: 260px; font-weight: 600; }
+    input { width: 160px; padding: 4px 6px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; background: #fff; padding: 12px; margin: 10px 0; }
+    .top-grid { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+    .top-left { flex: 0 0 360px; min-width: 360px; }
+    .top-right { flex: 1 1 auto; min-width: 320px; }
+    img { border-radius: 6px; }
+    .responsive-img { width: 100%; max-width: 800px; max-height: 600px; height: auto; object-fit: contain; display: block; margin: 0; }
+    .small { font-size: 0.9em; color: #555; }
+    .ok { outline: 2px solid #2e7d32; }
+    .bad { outline: 2px solid #c62828; }
+    .section-title { font-weight: 700; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h2 id="main-title">Übung: Reihen- und Parallelschaltung [... loading ...]</h2>
+  <div class="row">
+    <label class="label" id="lbl-lang">Sprache:</label>
+    <select id="lang">
+      <option value="de">Deutsch</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+  <div class="row">
+    <label class="label" id="lbl-seed">Seed:</label>
+    <input id="seed" autocomplete="off" />
+    <button id="gen-seed">Generieren (Seed)</button>
+    <button id="gen-random">Generieren (Random)</button>
+  </div>
+
+  <div class="top-grid">
+    <div id="values" class="card top-left"></div>
+    <div class="card top-right">
+      <img id="schematic" class="responsive-img" />
+      <div id="schematic-msg" class="small"></div>
+    </div>
+  </div>
+
+  <div id="tasks" class="card"></div>
+  <div id="inputs" class="card"></div>
+
+  <button id="check">Prüfen</button>
+  <div id="check-status" class="small"></div>
+
+  <div class="small" style="margin-top:16px;">© 2026 Stefan Mönch – CC BY-NC 4.0</div>
+  <div style="margin-top:10px;">
+    <a href="https://github.com/iew-moe/et" target="_blank" rel="noopener noreferrer">
+      <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+           alt="GitHub Repo" width="30" height="30" style="vertical-align: middle;" />
+    </a>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

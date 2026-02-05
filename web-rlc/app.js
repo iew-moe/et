@@ -304,4 +304,18 @@ async function check() {
   }
 }
 
+function hookEnterCheck(fn) {
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const t = e.target;
+    if (!t) return;
+    const tag = (t.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'select' || tag === 'textarea') {
+      e.preventDefault();
+      fn();
+    }
+  });
+}
+
 init();
+hookEnterCheck(check);
