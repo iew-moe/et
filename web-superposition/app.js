@@ -71,6 +71,29 @@ function tr(key) {
   return (I18N[LANG] && I18N[LANG][key]) || I18N.de[key] || key;
 }
 
+function loadProgress() {
+  try {
+    return JSON.parse(localStorage.getItem("exerciseProgress") || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveProgress(p) {
+  localStorage.setItem("exerciseProgress", JSON.stringify(p));
+}
+
+function updateProgress(exId, taskId, percent) {
+  if (!taskId) return;
+  const p = loadProgress();
+  if (!p[exId]) p[exId] = {};
+  const prev = Number(p[exId][taskId] || 0);
+  if (percent > prev) {
+    p[exId][taskId] = percent;
+    saveProgress(p);
+  }
+}
+
 let CURRENT = null;
 
 function setLoadingTitle(isLoading) {
@@ -403,11 +426,13 @@ function checkAnswers() {
   ];
 
   let allOk = true;
+  let okCount = 0;
   for (const [id, u, r] of fields) {
     const el = document.getElementById(id);
     el.classList.remove("ok", "bad");
     const ok = Number.isFinite(u) && withinTol(u, r);
     if (!ok) allOk = false;
+    if (ok) okCount += 1;
     el.classList.add(ok ? "ok" : "bad");
   }
 
@@ -421,6 +446,10 @@ function checkAnswers() {
   } catch (e) {
     st.innerHTML += `<br><span style="color:#c62828">Error: ${e}</span>`;
   }
+
+  const total = fields.length;
+  const percent = total ? Math.round((okCount / total) * 100) : 0;
+  updateProgress("superposition", String(CURRENT.seed || ""), percent);
 }
 
 function valueCell(v, unit) {

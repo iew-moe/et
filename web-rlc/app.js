@@ -57,9 +57,33 @@ let LANG = localStorage.getItem('lang') || 'de';
 if (!I18N[LANG]) LANG = 'de';
 let BASE_TITLE = I18N[LANG].title;
 document.title = `${BASE_TITLE} ${I18N[LANG].loading}`;
+let currentSeed = '';
 
 function tr(k) {
   return (I18N[LANG] && I18N[LANG][k]) || I18N.de[k] || k;
+}
+
+function loadProgress() {
+  try {
+    return JSON.parse(localStorage.getItem('exerciseProgress') || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveProgress(p) {
+  localStorage.setItem('exerciseProgress', JSON.stringify(p));
+}
+
+function updateProgress(exId, taskId, percent) {
+  if (!taskId) return;
+  const p = loadProgress();
+  if (!p[exId]) p[exId] = {};
+  const prev = Number(p[exId][taskId] || 0);
+  if (percent > prev) {
+    p[exId][taskId] = percent;
+    saveProgress(p);
+  }
 }
 
 function setLoadingTitle(isLoading) {
@@ -242,6 +266,7 @@ async function generateWithMode(mode = 'seed') {
   }
 
   document.getElementById('seed').value = data.seed;
+  currentSeed = String(data.seed || '');
   valuesEl.innerHTML = `
     <b>${tr('values')}</b><br>
     <i>R</i> = ${data.values.R}<br>
@@ -302,6 +327,12 @@ async function check() {
       r.parentElement.classList.add(data['nature'] ? 'ok' : 'bad');
     });
   }
+
+  const keys = allFieldKeys.filter(k => k in data);
+  const okCount = keys.reduce((acc, k) => acc + (data[k] ? 1 : 0), 0) + (data['nature'] ? 1 : 0);
+  const total = keys.length + ('nature' in data ? 1 : 0);
+  const percent = total ? Math.round((okCount / total) * 100) : 0;
+  updateProgress('rlc', currentSeed, percent);
 }
 
 function hookEnterCheck(fn) {

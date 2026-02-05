@@ -49,6 +49,29 @@ function tr(k) {
   return (I18N[LANG] && I18N[LANG][k]) || I18N.de[k] || k;
 }
 
+function loadProgress() {
+  try {
+    return JSON.parse(localStorage.getItem('exerciseProgress') || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveProgress(p) {
+  localStorage.setItem('exerciseProgress', JSON.stringify(p));
+}
+
+function updateProgress(exId, taskId, percent) {
+  if (!taskId) return;
+  const p = loadProgress();
+  if (!p[exId]) p[exId] = {};
+  const prev = Number(p[exId][taskId] || 0);
+  if (percent > prev) {
+    p[exId][taskId] = percent;
+    saveProgress(p);
+  }
+}
+
 function setLoadingTitle(isLoading) {
   const t = isLoading ? `${tr('title')} ${tr('loading')}` : tr('title');
   document.title = t;
@@ -222,6 +245,9 @@ function onCheck() {
   document.getElementById('check-status').textContent =
     ok ? `${tr('correct')}. ${tr('expected')}: ${si} (${pref})`
        : `${tr('wrong')}. ${tr('expected')}: ${si} (${pref})`;
+
+  const percent = ok ? 100 : 0;
+  updateProgress('parallel_series', String(state.seed), percent);
 }
 
 function hookEnterCheck(fn) {

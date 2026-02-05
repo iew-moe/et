@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8" />
@@ -9,10 +9,32 @@
     .card { max-width: 900px; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; padding: 16px; }
     h1 { margin-top: 0; }
     .row { display: flex; align-items: center; gap: 8px; margin: 0 0 14px 0; }
-    ul { margin: 0; padding-left: 22px; }
+    ul { margin: 0; padding-left: 0; list-style: none; }
     a { color: #0969da; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .footer { margin-top: 16px; font-size: 0.9rem; color: #57606a; }
+    .thumb { margin: 6px 0 12px 0; }
+    .thumb img { max-height: 150px; width: auto; display: block; border-radius: 6px; }
+    .exercise-title { font-size: 1.15rem; font-weight: 700; display: inline-block; margin: 2px 0 4px 0; }
+    .exercise-head { display: flex; align-items: center; gap: 12px; margin: 2px 0 6px 0; }
+    .title-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .progress { display: flex; align-items: center; }
+    .progress-total .ring { width: 58px; height: 58px; font-size: 0.95rem; }
+    .progress-total .ring::before { width: 46px; height: 46px; }
+    .ring {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem; color: #1f2328;
+      background: conic-gradient(#d0d7de 0deg, #d0d7de 360deg);
+      position: relative;
+    }
+    .ring::before {
+      content: "";
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #fff;
+      position: absolute;
+    }
+    .ring > span { position: relative; z-index: 1; }
   </style>
 </head>
 <body>
@@ -24,13 +46,51 @@
         <option value="en">English</option>
       </select>
     </div>
-    <h1 id="title">Übungen zur Einführung in die Elektrotechnik</h1>
+
+    <div class="title-row">
+      <h1 id="title">Übungen zur Einführung in die Elektrotechnik</h1>
+      <div id="prog-total" class="progress progress-total"></div>
+    </div>
+
     <ul>
-      <li><a id="lnk-leiter" href="web-leiter/">Übung: Elektrischer Leiter</a></li>
-      <li><a id="lnk-ps" href="web-parallel-series/">Übung: Reihen- und Parallelschaltung</a></li>
-      <li><a id="lnk-rlc" href="web-rlc/">Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)</a></li>
-      <li><a id="lnk-super" href="web-superposition/">Übung: Überlagerungssatz (mehrere Quellen und R)</a></li>
+      <li>
+        <div class="exercise-head">
+          <span id="lnk-leiter" class="exercise-title">1) Übung: Elektrischer Leiter</span>
+          <div id="prog-leiter" class="progress"></div>
+        </div>
+        <div class="thumb">
+          <a href="web-leiter/"><img src="schematics/leiter_topologies_clean/leiter_I_no_load.png" alt="Leiter Übung"></a>
+        </div>
+      </li>
+      <li>
+        <div class="exercise-head">
+          <span id="lnk-ps" class="exercise-title">2) Übung: Reihen- und Parallelschaltung</span>
+          <div id="prog-ps" class="progress"></div>
+        </div>
+        <div class="thumb">
+          <a href="web-parallel-series/"><img src="schematics/parallel_series_topos_clean/parallel_series_C_2P.png" alt="Parallel/Serie Übung"></a>
+        </div>
+      </li>
+      <li>
+        <div class="exercise-head">
+          <span id="lnk-rlc" class="exercise-title">3) Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)</span>
+          <div id="prog-rlc" class="progress"></div>
+        </div>
+        <div class="thumb">
+          <a href="web-rlc/"><img src="schematics/C_R__L.png" alt="RLC Übung"></a>
+        </div>
+      </li>
+      <li>
+        <div class="exercise-head">
+          <span id="lnk-super" class="exercise-title">4) Übung: Überlagerungssatz (mehrere Quellen und R)</span>
+          <div id="prog-super" class="progress"></div>
+        </div>
+        <div class="thumb">
+          <a href="web-superposition/"><img src="schematics/superposition/superposition_103401.png" alt="Überlagerung Übung"></a>
+        </div>
+      </li>
     </ul>
+
     <div class="footer">
       © 2026 Stefan Mönch – CC BY-NC 4.0 ·
       <a href="https://github.com/iew-moe/et" target="_blank" rel="noopener noreferrer">
@@ -38,6 +98,9 @@
              alt="GitHub Repo" width="18" height="18" style="vertical-align: middle;" />
         GitHub
       </a>
+    </div>
+    <div class="footer">
+      Dies ist die erste Version dieser Web-App (5.2.2026) – bitte melden Sie Fehler, Anregungen und Verbesserungsvorschläge per E-Mail direkt an den zuständigen Dozenten
     </div>
   </div>
 
@@ -47,19 +110,19 @@
         pageTitle: "Übungen zur Einführung in die Elektrotechnik",
         lang: "Sprache:",
         title: "Übungen zur Einführung in die Elektrotechnik",
-        leiter: "Übung: Elektrischer Leiter",
-        ps: "Übung: Reihen- und Parallelschaltung",
-        rlc: "Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)",
-        super: "Übung: Überlagerungssatz (mehrere Quellen und R)"
+        leiter: "1) Übung: Elektrischer Leiter",
+        ps: "2) Übung: Reihen- und Parallelschaltung",
+        rlc: "3) Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)",
+        super: "4) Übung: Überlagerungssatz (mehrere Quellen und R)"
       },
       en: {
         pageTitle: "Exercises: Introduction to Electrical Engineering",
         lang: "Language:",
         title: "Exercises: Introduction to Electrical Engineering",
-        leiter: "Exercise: Electrical Conductor",
-        ps: "Exercise: Series and Parallel Circuits",
-        rlc: "Exercise: AC Complex Calculations – Phasor Diagram (RLC)",
-        super: "Exercise: Superposition Theorem (multiple sources and R)"
+        leiter: "1) Exercise: Electrical Conductor",
+        ps: "2) Exercise: Series and Parallel Circuits",
+        rlc: "3) Exercise: AC Complex Calculations – Phasor Diagram (RLC)",
+        super: "4) Exercise: Superposition Theorem (multiple sources and R)"
       }
     };
 
@@ -76,7 +139,65 @@
       document.getElementById("lnk-ps").textContent = t.ps;
       document.getElementById("lnk-rlc").textContent = t.rlc;
       document.getElementById("lnk-super").textContent = t.super;
+      updateProgressUI();
       document.getElementById("lang").value = LANG;
+    }
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem("exerciseProgress") || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function avgProgress(exId) {
+      const p = loadProgress();
+      const ex = p[exId] || {};
+      const vals = Object.values(ex).map((v) => Number(v)).filter((v) => Number.isFinite(v));
+      if (!vals.length) return 0;
+      const sum = vals.reduce((a, b) => a + b, 0);
+      return Math.round(sum / vals.length);
+    }
+
+    function ringColor(p) {
+      if (p >= 75) return "#2da44e";
+      if (p >= 40) return "#0969da";
+      return "#8c959f";
+    }
+
+    function updateProgressUI() {
+      const map = [
+        ["leiter", "prog-leiter"],
+        ["parallel_series", "prog-ps"],
+        ["rlc", "prog-rlc"],
+        ["superposition", "prog-super"],
+      ];
+      for (const [exId, elId] of map) {
+        const el = document.getElementById(elId);
+        if (!el) continue;
+        const p = avgProgress(exId);
+        const color = ringColor(p);
+        const deg = Math.round((p / 100) * 360);
+        el.innerHTML = `
+          <div class="ring" style="background: conic-gradient(${color} 0deg ${deg}deg, #d0d7de ${deg}deg 360deg);">
+            <span>${p}%</span>
+          </div>
+        `;
+      }
+
+      const totalEl = document.getElementById("prog-total");
+      if (totalEl) {
+        const vals = map.map(([exId]) => avgProgress(exId));
+        const totalP = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
+        const colorT = ringColor(totalP);
+        const degT = Math.round((totalP / 100) * 360);
+        totalEl.innerHTML = `
+          <div class="ring" style="background: conic-gradient(${colorT} 0deg ${degT}deg, #d0d7de ${degT}deg 360deg);">
+            <span>${totalP}%</span>
+          </div>
+        `;
+      }
     }
 
     document.getElementById("lang").addEventListener("change", (e) => {
