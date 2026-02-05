@@ -118,7 +118,7 @@ function applyLanguageUI() {
   if (blank) blank.textContent = tr('blank');
   const check = document.getElementById('check');
   if (check) check.textContent = tr('check');
-  setLoadingTitle(false);
+  setLoadingTitle(true);
 }
 
 function fmtEngSI(x, unit) {
