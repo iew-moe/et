@@ -461,6 +461,16 @@ def _has_open_ends(component_edges, wire_edges):
     return any(d == 1 for d in deg.values())
 
 
+def _actual_circuit_height(component_edges, wire_edges):
+    ys = []
+    for a, b in list(component_edges) + list(wire_edges):
+        ys.append(a[1])
+        ys.append(b[1])
+    if not ys:
+        return 0
+    return max(ys) - min(ys)
+
+
 def _build_netlist_from_grid(
     grid,
     comp_id_map,
@@ -569,6 +579,12 @@ def generate_case(seed_text=""):
     for iteration in range(1, 251):
         grid = _make_grid_topology(rng)
 
+        # Additional geometry constraint:
+        # actual used circuit height (in grid distances) must be <= 2.
+        ny_ist = _actual_circuit_height(grid["component_edges"], grid["wire_edges"])
+        if ny_ist > 2:
+            continue
+
         sources = [_pick_source(rng, 1), _pick_source(rng, 2)]
         resistors = _pick_resistors(rng, grid["n_res"])
         resistor_ids = _resistor_id_list(grid["n_res"], start_index=3)
@@ -624,6 +640,30 @@ def generate_case(seed_text=""):
                     break
             if has_zero_vi:
                 continue
+
+            # Additional gate:
+            # reject if source currents (full circuit) have equal magnitude,
+            # or source voltages have equal magnitude.
+            src_ids = [s["id"] for s in case.get("sources", [])]
+            if len(src_ids) == 2:
+                s1 = case["solved_values"].get(src_ids[0])
+                s2 = case["solved_values"].get(src_ids[1])
+                if s1 is None or s2 is None:
+                    continue
+
+                abs_tol = 1e-9
+                rel_tol = 1e-3
+
+                def _is_same_abs(a, b):
+                    aa = abs(a)
+                    bb = abs(b)
+                    scale = max(aa, bb, 1.0)
+                    return abs(aa - bb) <= max(abs_tol, rel_tol * scale)
+
+                if _is_same_abs(s1["I"], s2["I"]):
+                    continue
+                if _is_same_abs(s1["V"], s2["V"]):
+                    continue
 
             # Superposition quality gate:
             # both partial target voltages must be non-zero and different.
