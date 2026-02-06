@@ -41,4 +41,5 @@ Superpositionsaufgabe mit zwei Quellen (U/I) und 3–5 Widerständen. Gesucht is
 - Encoding/Um­laute nur UTF‑8.
 - Quellen‑ und Widerstandswerte werden als SI‑Werte gespeichert; Anzeige mit Präfixen.
 - Für Strom/Spannungspfeile gilt lcapy‑Standardrichtung. Bei Vergleich mit handschriftlicher Konvention ggf. Vorzeichen beachten.
+- Hinweis: Quellströme können bezogen auf extern eingezeichnete Strompfeile eine andere Richtung/Vorzeichenkonvention haben; bei Abgleich stets die interne Zählrichtung verwenden.
 - Berechnung erfolgt per linearer Netzwerklösung (Knoten-/Maschenverfahren in lcapy/Sympy).

@@ -36,4 +36,5 @@ Leiterwiderstand, Stromdichte, Temperaturabhängigkeit und Leistung. Varianten m
 - Encoding in HTML/JS muss UTF‑8 (Umlaute).
 - Werte/Einheiten werden intern in SI gehalten; Anzeige mit passenden Präfixen.
 - Pfeilrichtungen in lcapy folgen Standard‑Konventionen; bei Quellen ggf. Vorzeichen in der Rechnung prüfen.
+- Hinweis: Quellströme können bezogen auf extern eingezeichnete Strompfeile eine andere Richtung/Vorzeichenkonvention haben; bei Abgleich stets die interne Zählrichtung verwenden.
 - Temperaturabhängigkeit: R(T)=R(T0)*(1+α*(T−T0)).

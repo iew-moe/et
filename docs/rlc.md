@@ -39,4 +39,5 @@ Interaktive Übung zur komplexen RLC‑Schaltung (AC). Zufällige Bauteilwerte, 
 - Encoding in HTML/JS muss UTF‑8 sein (Umlaute).
 - Bauteilwerte werden als SI‑Werte gespeichert und in der UI mit Präfixen formatiert (m, µ/u, n, k, M, …).
 - Pfeilrichtungen in lcapy: Standard‑Konventionen gelten (Spannungspfeil zeigt von „+“ nach „–“ des Bauteils, Strompfeil in Richtung positiver Stromzählrichtung). Bei Vergleich mit LTspice/anderen Tools ggf. Vorzeichen prüfen.
+- Hinweis: Quellströme können bezogen auf extern eingezeichnete Strompfeile eine andere Richtung/Vorzeichenkonvention haben; bei Abgleich stets die interne Zählrichtung verwenden.
 - Intern wird das RLC‑Netzwerk per komplexer Impedanzen berechnet (Z_R, Z_L=jωL, Z_C=1/(jωC)) und dann algebraisch kombiniert (Seriell/Parallel).
