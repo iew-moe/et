@@ -577,7 +577,7 @@ function solveCase(c) {
 
     P0,
 
-    leiter_typ: alpha > 0 ? "Warmleiter" : "Kaltleiter",
+    leiter_typ: alpha > 0 ? "Kaltleiter" : "Warmleiter",
 
   };
 

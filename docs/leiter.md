@@ -38,3 +38,4 @@ Leiterwiderstand, Stromdichte, Temperaturabhängigkeit und Leistung. Varianten m
 - Pfeilrichtungen in lcapy folgen Standard‑Konventionen; bei Quellen ggf. Vorzeichen in der Rechnung prüfen.
 - Hinweis: Quellströme können bezogen auf extern eingezeichnete Strompfeile eine andere Richtung/Vorzeichenkonvention haben; bei Abgleich stets die interne Zählrichtung verwenden.
 - Temperaturabhängigkeit: R(T)=R(T0)*(1+α*(T−T0)).
+- Einordnung: α > 0 ⇒ Kaltleiter (PTC), α < 0 ⇒ Warmleiter (NTC) gemäß Konvention.
