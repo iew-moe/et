@@ -12,6 +12,7 @@ const I18N = {
     values: 'Schaltungswerte',
     tasks: 'Aufgaben',
     check: 'Pr\u00fcfen',
+    showSolution: 'Musterl\u00f6sung anzeigen',
     nature: 'Schaltung ist:',
     inductive: 'induktiv',
     capacitive: 'kapazitiv',
@@ -38,6 +39,7 @@ const I18N = {
     values: 'Circuit values',
     tasks: 'Tasks',
     check: 'Check',
+    showSolution: 'Show worked solution',
     nature: 'Circuit is:',
     inductive: 'inductive',
     capacitive: 'capacitive',
@@ -120,6 +122,8 @@ function applyLanguageUI() {
   if (blank) blank.textContent = tr('blank');
   const check = document.getElementById('check');
   if (check) check.textContent = tr('check');
+  const showSolution = document.getElementById('show-solution');
+  if (showSolution) showSolution.textContent = tr('showSolution');
   setLoadingTitle(true);
 }
 
@@ -228,6 +232,8 @@ async function init() {
   document.getElementById('gen-default').onclick = () => generateWithMode('default');
   document.getElementById('gen-random').onclick = () => generateWithMode('random');
   document.getElementById('check').onclick = check;
+  const showSolution = document.getElementById('show-solution');
+  if (showSolution) showSolution.onclick = showSolutionCard;
   const langSel = document.getElementById('lang');
   if (langSel) {
     langSel.value = LANG;
@@ -255,6 +261,8 @@ async function generateWithMode(mode = 'seed') {
   }
   const valuesEl = document.getElementById('values');
   valuesEl.innerHTML = `<b>${tr('values')}</b><br>...`;
+  const solutionCard = document.getElementById('solution-card');
+  if (solutionCard) solutionCard.style.display = 'none';
 
   let data;
   try {
@@ -351,6 +359,11 @@ async function check() {
     fields: data,
   };
   updateProgress('rlc', currentSeed, percent);
+}
+
+function showSolutionCard() {
+  const solutionCard = document.getElementById('solution-card');
+  if (solutionCard) solutionCard.style.display = 'block';
 }
 
 window.getEtTutorContext = function () {

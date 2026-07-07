@@ -25,6 +25,7 @@ const I18N = {
     solution: "Musterlösung",
 
     check: "Prüfen",
+    showSolution: "Musterlösung anzeigen",
 
     ok: "Alle Eingaben innerhalb 1% Toleranz.",
 
@@ -159,6 +160,7 @@ const I18N = {
     solution: "Worked solution",
 
     check: "Check",
+    showSolution: "Show worked solution",
 
     ok: "All inputs are within 1% tolerance.",
 
@@ -349,6 +351,8 @@ function applyLanguageUI() {
   const bCheck = document.getElementById("check");
 
   if (bCheck) bCheck.textContent = tr("check");
+  const bShowSolution = document.getElementById("show-solution");
+  if (bShowSolution) bShowSolution.textContent = tr("showSolution");
 
   const lblSeed = document.getElementById("lbl-seed");
 
@@ -1140,6 +1144,11 @@ window.getEtTutorContext = function () {
   };
 };
 
+function showSolutionCard() {
+  const card = document.getElementById("solution-card");
+  if (card) card.style.display = "block";
+}
+
 
 
 function renderAll(c) {
@@ -1156,6 +1165,8 @@ function renderAll(c) {
 
   clearChecks();
   lastTutorCheckResult = null;
+  const card = document.getElementById("solution-card");
+  if (card) card.style.display = "none";
 
   document.getElementById("nature").value = c.result.leiter_typ;
 
@@ -1246,6 +1257,8 @@ document.getElementById("gen-seed").addEventListener("click", () => generate(doc
 document.getElementById("gen-random").addEventListener("click", () => generate(""));
 
 document.getElementById("check").addEventListener("click", checkAll);
+const showSolutionButton = document.getElementById("show-solution");
+if (showSolutionButton) showSolutionButton.addEventListener("click", showSolutionCard);
 
 hookEnterCheck(checkAll);
 

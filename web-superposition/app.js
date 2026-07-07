@@ -8,6 +8,7 @@ const I18N = {
     genSeed: "Generieren (Seed)",
     genRandom: "Generieren (Random)",
     check: "Prüfen",
+    showSolution: "Musterlösung anzeigen",
     seed: "Seed:",
     circuit: "Gesamtschaltung",
     inputs: "Eingaben",
@@ -39,6 +40,7 @@ const I18N = {
     genSeed: "Generate (Seed)",
     genRandom: "Generate (Random)",
     check: "Check",
+    showSolution: "Show worked solution",
     seed: "Seed:",
     circuit: "Complete circuit",
     inputs: "Inputs",
@@ -117,6 +119,8 @@ function applyLanguageUI() {
   if (bRandom) bRandom.textContent = tr("genRandom");
   const bCheck = document.getElementById("check");
   if (bCheck) bCheck.textContent = tr("check");
+  const bShowSolution = document.getElementById("show-solution");
+  if (bShowSolution) bShowSolution.textContent = tr("showSolution");
   const c = document.getElementById("lbl-circuit");
   if (c) c.textContent = tr("circuit");
   const i = document.getElementById("lbl-inputs");
@@ -442,12 +446,6 @@ function checkAnswers() {
     ? `<span style="color:#2e7d32">${tr("checkOk")}</span>`
     : `<span style="color:#c62828">${tr("checkBad")}</span>`;
 
-  try {
-    renderSolutionsAfterCheck();
-  } catch (e) {
-    st.innerHTML += `<br><span style="color:#c62828">Error: ${e}</span>`;
-  }
-
   const total = fields.length;
   const percent = total ? Math.round((okCount / total) * 100) : 0;
   lastTutorCheckResult = {
@@ -503,6 +501,8 @@ function renderSolutionsAfterCheck() {
   const [s1, s2] = srcIds;
   const p1Rel = ((mode === "V" ? topo.part_png_v : topo.part_png_i) || []).find((x) => x.active_source === s1)?.png;
   const p2Rel = ((mode === "V" ? topo.part_png_v : topo.part_png_i) || []).find((x) => x.active_source === s2)?.png;
+  const partsCard = document.getElementById("parts-card");
+  if (partsCard) partsCard.style.display = "block";
   document.getElementById("part1").src = p1Rel ? `../superposition_topologies_50_clean/${p1Rel}` : "";
   document.getElementById("part2").src = p2Rel ? `../superposition_topologies_50_clean/${p2Rel}` : "";
   if (!p1Rel || !p2Rel) {
@@ -517,6 +517,7 @@ function renderSolutionsAfterCheck() {
     `${qsym1} (${tr("only")} ${src1Lbl} ${tr("active")}): <b>${fmtSI(expected.part1, unit)}</b><br>` +
     `${qsym2} (${tr("only")} ${src2Lbl} ${tr("active")}): <b>${fmtSI(expected.part2, unit)}</b><br>` +
     `${qsym} (${tr("totalShort")}): <b>${fmtSI(expected.total, unit)}</b>`;
+  document.getElementById("solution").style.display = "block";
 
   const ids = new Set([
     ...Object.keys(expected.full || {}),
@@ -549,6 +550,7 @@ function renderSolutionsAfterCheck() {
   }
   html += "</table>";
   document.getElementById("table").innerHTML = html;
+  document.getElementById("table").style.display = "block";
 }
 
 function renderCase(seed, db) {
@@ -603,7 +605,11 @@ function renderCase(seed, db) {
   document.getElementById("part1").src = "";
   document.getElementById("part2").src = "";
   document.getElementById("solution").innerHTML = "";
+  document.getElementById("solution").style.display = "none";
   document.getElementById("table").innerHTML = "";
+  document.getElementById("table").style.display = "none";
+  const partsCard = document.getElementById("parts-card");
+  if (partsCard) partsCard.style.display = "none";
   lastTutorCheckResult = null;
   renderInputs(mode, rid);
 
@@ -652,6 +658,8 @@ async function init() {
     };
 
     document.getElementById("check").onclick = checkAnswers;
+    const showSolution = document.getElementById("show-solution");
+    if (showSolution) showSolution.onclick = renderSolutionsAfterCheck;
     hookEnterCheck(checkAnswers);
 
     const seed = parseSeed("");

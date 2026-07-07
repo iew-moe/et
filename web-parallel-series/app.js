@@ -15,6 +15,8 @@
     taskCompute: 'Berechne die {kind} zwischen den Klemmen A-B.',
     taskUnits: 'Gib das Ergebnis in SI-Basiseinheit an ({unit}).',
     check: 'Prüfen',
+    showSolution: 'Musterlösung anzeigen',
+    solution: 'Musterlösung',
     expected: 'Erwartet',
     correct: 'Richtig',
     wrong: 'Falsch',
@@ -36,6 +38,8 @@
     taskCompute: 'Compute the {kind} between terminals A-B.',
     taskUnits: 'Give the result in SI base units ({unit}).',
     check: 'Check',
+    showSolution: 'Show worked solution',
+    solution: 'Worked solution',
     expected: 'Expected',
     correct: 'Correct',
     wrong: 'Wrong',
@@ -88,6 +92,8 @@ function applyLanguageUI() {
   document.getElementById('gen-seed').textContent = tr('genSeed');
   document.getElementById('gen-random').textContent = tr('genRandom');
   document.getElementById('check').textContent = tr('check');
+  const showSolution = document.getElementById('show-solution');
+  if (showSolution) showSolution.textContent = tr('showSolution');
   setLoadingTitle(false);
 }
 
@@ -217,6 +223,11 @@ function render(c) {
   document.getElementById('schematic').src = `../schematics/parallel_series_topos_clean/parallel_series_${c.kind}_${c.topo.id}.png`;
   document.getElementById('schematic-msg').textContent = '';
   document.getElementById('check-status').textContent = '';
+  const solutionCard = document.getElementById('solution-card');
+  if (solutionCard) {
+    solutionCard.style.display = 'none';
+    solutionCard.innerHTML = '';
+  }
   lastTutorCheckResult = null;
   const inp = document.getElementById('inp-eq');
   if (inp) inp.classList.remove('ok','bad');
@@ -242,11 +253,9 @@ function onCheck() {
   inp.classList.remove('ok','bad');
   inp.classList.add(ok ? 'ok' : 'bad');
 
-  const si = `${fmtNum(state.eq)} ${baseUnit(state.kind)}`;
-  const pref = `${fmtNum(state.eq / state.unitMult)} ${state.unitLabel}`;
   document.getElementById('check-status').textContent =
-    ok ? `${tr('correct')}. ${tr('expected')}: ${si} (${pref})`
-       : `${tr('wrong')}. ${tr('expected')}: ${si} (${pref})`;
+    ok ? `${tr('correct')}.`
+       : `${tr('wrong')}.`;
 
   const percent = ok ? 100 : 0;
   lastTutorCheckResult = {
@@ -256,6 +265,17 @@ function onCheck() {
     },
   };
   updateProgress('parallel_series', String(state.seed), percent);
+}
+
+function showSolution() {
+  if (!state) return;
+  const s = symbol(state.kind);
+  const si = `${fmtNum(state.eq)} ${baseUnit(state.kind)}`;
+  const pref = `${fmtNum(state.eq / state.unitMult)} ${state.unitLabel}`;
+  const solutionCard = document.getElementById('solution-card');
+  if (!solutionCard) return;
+  solutionCard.innerHTML = `<div class="section-title">${tr('solution')}</div>${s}<sub>AB</sub> = <b>${si}</b> (${pref})`;
+  solutionCard.style.display = 'block';
 }
 
 window.getEtTutorContext = function () {
@@ -315,6 +335,8 @@ function init() {
   document.getElementById('gen-seed').onclick = () => generate('seed');
   document.getElementById('gen-random').onclick = () => generate('random');
   document.getElementById('check').onclick = onCheck;
+  const showSolutionButton = document.getElementById('show-solution');
+  if (showSolutionButton) showSolutionButton.onclick = showSolution;
   generate('random');
   hookEnterCheck(onCheck);
 }
