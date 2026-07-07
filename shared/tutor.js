@@ -114,6 +114,57 @@
       .catch(() => {});
   }
 
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function applySavedSize(root, panel) {
+    try {
+      const saved = JSON.parse(localStorage.getItem("etTutorSize") || "{}");
+      if (Number.isFinite(saved.width)) {
+        root.style.width = `${clamp(saved.width, 340, window.innerWidth - 20)}px`;
+      }
+      if (Number.isFinite(saved.height)) {
+        panel.style.height = `${clamp(saved.height, 420, window.innerHeight - 80)}px`;
+      }
+    } catch {}
+  }
+
+  function setupResize(root, panel, handle) {
+    handle.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      handle.setPointerCapture(event.pointerId);
+
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const startWidth = root.getBoundingClientRect().width;
+      const startHeight = panel.getBoundingClientRect().height;
+
+      function onMove(moveEvent) {
+        const maxWidth = window.innerWidth - 20;
+        const maxHeight = window.innerHeight - 80;
+        const nextWidth = clamp(startWidth + startX - moveEvent.clientX, 340, maxWidth);
+        const nextHeight = clamp(startHeight + startY - moveEvent.clientY, 420, maxHeight);
+        root.style.width = `${nextWidth}px`;
+        panel.style.height = `${nextHeight}px`;
+      }
+
+      function onUp() {
+        handle.removeEventListener("pointermove", onMove);
+        handle.removeEventListener("pointerup", onUp);
+        handle.removeEventListener("pointercancel", onUp);
+        localStorage.setItem("etTutorSize", JSON.stringify({
+          width: root.getBoundingClientRect().width,
+          height: panel.getBoundingClientRect().height,
+        }));
+      }
+
+      handle.addEventListener("pointermove", onMove);
+      handle.addEventListener("pointerup", onUp);
+      handle.addEventListener("pointercancel", onUp);
+    });
+  }
+
   async function askTutor(message, messagesEl, statusEl, inputEl, sendButton) {
     const workerUrl = cfg.workerUrl || "";
     if (!workerUrl || workerUrl.includes("YOUR_WORKER_URL")) {
@@ -192,6 +243,8 @@
     const send = el("button", "et-tutor-send", t("send"));
     send.type = "submit";
     form.append(input, send);
+    const resize = el("div", "et-tutor-resize");
+    resize.title = lang() === "en" ? "Resize" : "Groesse aendern";
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -207,9 +260,11 @@
       panel.hidden = true;
     });
 
-    panel.append(header, messages, chips, status, form);
+    panel.append(header, messages, chips, status, form, resize);
     root.append(toggle, panel);
     document.body.appendChild(root);
+    applySavedSize(root, panel);
+    setupResize(root, panel, resize);
   }
 
   if (document.readyState === "loading") {
