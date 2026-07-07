@@ -66,6 +66,7 @@ const I18N = {
 let LANG = localStorage.getItem("lang") || "de";
 if (!I18N[LANG]) LANG = "de";
 let BASE_TITLE = I18N[LANG].title;
+let lastTutorCheckResult = null;
 
 function tr(key) {
   return (I18N[LANG] && I18N[LANG][key]) || I18N.de[key] || key;
@@ -449,8 +450,39 @@ function checkAnswers() {
 
   const total = fields.length;
   const percent = total ? Math.round((okCount / total) * 100) : 0;
+  lastTutorCheckResult = {
+    percent,
+    fields: Object.fromEntries(fields.map(([id, u, r]) => [id, Number.isFinite(u) && withinTol(u, r)])),
+  };
   updateProgress("superposition", String(CURRENT.seed || ""), percent);
 }
+
+window.getEtTutorContext = function () {
+  const userInputs = {};
+  for (const id of ["in-p1", "in-p2", "in-gt"]) {
+    const el = document.getElementById(id);
+    if (el && String(el.value || "").trim()) userInputs[id] = String(el.value).trim();
+  }
+
+  return {
+    exerciseId: "superposition",
+    lang: LANG,
+    seed: document.getElementById("seed")?.value || (CURRENT ? String(CURRENT.seed || "") : ""),
+    title: tr("title"),
+    values: CURRENT ? {
+      mode: CURRENT.mode,
+      targetId: CURRENT.targetId,
+      sources: CURRENT.values && CURRENT.values.sources,
+      resistors: CURRENT.values && CURRENT.values.resistors,
+      topologyId: CURRENT.topo && CURRENT.topo.topology_id,
+    } : null,
+    visibleValuesText: document.getElementById("values")?.innerText || "",
+    visibleTasksText: document.getElementById("tasks")?.innerText || "",
+    userInputs,
+    checkResult: lastTutorCheckResult,
+    formulaSheetUrl: "../Formelsammlung_ET1.html",
+  };
+};
 
 function valueCell(v, unit) {
   if (!Number.isFinite(v)) return "-";
@@ -572,6 +604,7 @@ function renderCase(seed, db) {
   document.getElementById("part2").src = "";
   document.getElementById("solution").innerHTML = "";
   document.getElementById("table").innerHTML = "";
+  lastTutorCheckResult = null;
   renderInputs(mode, rid);
 
   CURRENT = {

@@ -170,6 +170,7 @@ function baseUnit(kind) {
 function symbol(kind) { return {R:'R', L:'L', C:'C'}[kind]; }
 
 let state = null;
+let lastTutorCheckResult = null;
 
 function makeCase(seedText) {
   const seed = stableSeed(seedText);
@@ -216,6 +217,7 @@ function render(c) {
   document.getElementById('schematic').src = `../schematics/parallel_series_topos_clean/parallel_series_${c.kind}_${c.topo.id}.png`;
   document.getElementById('schematic-msg').textContent = '';
   document.getElementById('check-status').textContent = '';
+  lastTutorCheckResult = null;
   const inp = document.getElementById('inp-eq');
   if (inp) inp.classList.remove('ok','bad');
 }
@@ -247,8 +249,35 @@ function onCheck() {
        : `${tr('wrong')}. ${tr('expected')}: ${si} (${pref})`;
 
   const percent = ok ? 100 : 0;
+  lastTutorCheckResult = {
+    percent,
+    fields: {
+      inp_eq: ok,
+    },
+  };
   updateProgress('parallel_series', String(state.seed), percent);
 }
+
+window.getEtTutorContext = function () {
+  const input = document.getElementById('inp-eq');
+  return {
+    exerciseId: 'parallel_series',
+    lang: LANG,
+    seed: document.getElementById('seed')?.value || (state ? String(state.seed) : ''),
+    title: tr('title'),
+    values: state ? {
+      kind: state.kind,
+      topology: state.topo && state.topo.name ? state.topo.name[LANG] : '',
+      unitLabel: state.unitLabel,
+      coeffs: state.coeffs,
+    } : null,
+    visibleValuesText: document.getElementById('values')?.innerText || '',
+    visibleTasksText: document.getElementById('tasks')?.innerText || '',
+    userInputs: input && input.value.trim() ? { inp_eq: input.value.trim() } : {},
+    checkResult: lastTutorCheckResult,
+    formulaSheetUrl: '../Formelsammlung_ET1.html',
+  };
+};
 
 function hookEnterCheck(fn) {
   document.addEventListener('keydown', (e) => {

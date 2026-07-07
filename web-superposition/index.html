@@ -23,6 +23,7 @@
     .ok { outline: 2px solid #2e7d32; }
     .bad { outline: 2px solid #c62828; }
   </style>
+  <link rel="stylesheet" href="../shared/tutor.css" />
   <script defer src="https://cloud.umami.is/script.js" data-website-id="fe2809e9-3433-432f-be27-22f206dfcfae"></script>
 </head>
 <body>
@@ -87,6 +88,15 @@
   </div>
 
   <script src="app.js"></script>
+  <script>
+    window.ET_TUTOR_CONFIG = {
+      exerciseId: "superposition",
+      exerciseTitle: "Ueberlagerungssatz",
+      workerUrl: "https://et-tutor.stefan-moench.workers.dev",
+      formulaSheetUrl: "../Formelsammlung_ET1.html"
+    };
+  </script>
+  <script src="../shared/tutor.js"></script>
 </body>
 </html>
 

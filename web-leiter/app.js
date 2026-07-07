@@ -279,6 +279,7 @@ if (!I18N[LANG]) LANG = "de";
 let BASE_TITLE = I18N[LANG].title;
 
 let CURRENT = null;
+let lastTutorCheckResult = null;
 
 
 
@@ -1090,10 +1091,54 @@ function checkAll() {
   document.getElementById("check-status").textContent = allOk ? tr("ok") : tr("bad");
   if (totalCount > 0) {
     const percent = Math.round((okCount / totalCount) * 100);
+    const fields = {};
+    for (const id of ["in_R20", "in_S20", "in_I0", "in_VRL", "in_A", "in_PL", "in_PV", "in_P0", "in_RT"]) {
+      const el = document.getElementById(id);
+      if (el) fields[id] = el.classList.contains("ok");
+    }
+    if (typ) fields.nature = okTyp;
+    lastTutorCheckResult = { percent, fields };
     updateProgress("leiter", String(c.seed), percent);
   }
 
 }
+
+window.getEtTutorContext = function () {
+  const userInputs = {};
+  for (const id of ["in_R20", "in_S20", "in_I0", "in_VRL", "in_A", "in_PL", "in_PV", "in_P0", "in_RT"]) {
+    const el = document.getElementById(id);
+    if (el && String(el.value || "").trim()) userInputs[id] = String(el.value).trim();
+  }
+
+  const nature = document.getElementById("nature");
+  if (nature && nature.value) userInputs.nature = nature.value;
+
+  return {
+    exerciseId: "leiter",
+    lang: LANG,
+    seed: document.getElementById("seed")?.value || (CURRENT ? String(CURRENT.seed || "") : ""),
+    title: tr("title"),
+    values: CURRENT ? {
+      mode: CURRENT.mode,
+      material: CURRENT.material && CURRENT.material.name,
+      rho: CURRENT.material && CURRENT.material.rho,
+      alpha: CURRENT.material && CURRENT.material.alpha,
+      length_m: CURRENT.L_m,
+      temperature_C: CURRENT.T_C,
+      source_type: CURRENT.source_type,
+      source_value: CURRENT.source_value,
+      load_ohm: CURRENT.RL_ohm,
+      geometry_kind: CURRENT.geom_kind,
+      geometry_value_mm: CURRENT.geom_val_mm,
+      current_density_target: CURRENT.S_target,
+    } : null,
+    visibleValuesText: document.getElementById("values")?.innerText || "",
+    visibleTasksText: document.getElementById("tasks")?.innerText || "",
+    userInputs,
+    checkResult: lastTutorCheckResult,
+    formulaSheetUrl: "../Formelsammlung_ET1.html",
+  };
+};
 
 
 
@@ -1110,6 +1155,7 @@ function renderAll(c) {
   renderSolution(c);
 
   clearChecks();
+  lastTutorCheckResult = null;
 
   document.getElementById("nature").value = c.result.leiter_typ;
 

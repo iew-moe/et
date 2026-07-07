@@ -46,6 +46,37 @@
     return node;
   }
 
+  function ensureMathJax() {
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      return Promise.resolve(window.MathJax);
+    }
+    if (window.__etTutorMathJaxPromise) {
+      return window.__etTutorMathJaxPromise;
+    }
+
+    window.MathJax = window.MathJax || {
+      tex: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]],
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+        processEscapes: true,
+      },
+      options: {
+        skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+      },
+    };
+
+    window.__etTutorMathJaxPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
+      script.async = true;
+      script.onload = () => resolve(window.MathJax);
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+
+    return window.__etTutorMathJaxPromise;
+  }
+
   function collectDomFallback() {
     const inputs = {};
     document.querySelectorAll("input[id]").forEach((input) => {
@@ -75,6 +106,12 @@
     const msg = el("div", `et-tutor-msg ${role}`, message);
     container.appendChild(msg);
     container.scrollTop = container.scrollHeight;
+    ensureMathJax()
+      .then((mathJax) => mathJax.typesetPromise && mathJax.typesetPromise([msg]))
+      .then(() => {
+        container.scrollTop = container.scrollHeight;
+      })
+      .catch(() => {});
   }
 
   async function askTutor(message, messagesEl, statusEl, inputEl, sendButton) {

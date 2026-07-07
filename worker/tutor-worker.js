@@ -1,3 +1,5 @@
+import { SHARED_TUTOR_CONTEXT, exerciseContextFor } from "./tutor-context.js";
+
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 
 function corsHeaders(origin, env) {
@@ -43,7 +45,8 @@ function compactContext(context) {
   };
 }
 
-function systemPrompt(helpLevel) {
+function systemPrompt(helpLevel, context) {
+  const exerciseContext = exerciseContextFor(context.exerciseId);
   return [
     "Du bist ein KI-Tutor fuer eine Einfuehrung-in-die-Elektrotechnik-Uebungsseite.",
     "Arbeite sokratisch und unterstuetzend.",
@@ -60,6 +63,10 @@ function systemPrompt(helpLevel) {
     "Bei Hilfestufe 4: fuehre schrittweise zur Loesung, aber erklaere jeden Schritt.",
     "Antwortsprache: Deutsch, ausser der Kontext lang ist en.",
     `Aktuelle Hilfestufe: ${helpLevel}.`,
+    "",
+    "Verbindlicher Kontext:",
+    SHARED_TUTOR_CONTEXT,
+    exerciseContext,
   ].join("\n");
 }
 
@@ -123,7 +130,7 @@ export default {
       model: env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
       max_tokens: 700,
       temperature: 0.2,
-      system: systemPrompt(helpLevel),
+      system: systemPrompt(helpLevel, context),
       messages: [
         {
           role: "user",
