@@ -1,0 +1,141 @@
+.et-tutor {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: min(380px, calc(100vw - 36px));
+  z-index: 50;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.et-tutor-toggle,
+.et-tutor-send,
+.et-tutor-chip {
+  border: 1px solid #0969da;
+  background: #0969da;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.et-tutor-toggle {
+  float: right;
+  padding: 9px 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(31, 35, 40, 0.2);
+}
+
+.et-tutor-panel {
+  clear: both;
+  margin-top: 10px;
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.18);
+  overflow: hidden;
+}
+
+.et-tutor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #d0d7de;
+  font-weight: 700;
+}
+
+.et-tutor-close {
+  border: 0;
+  background: transparent;
+  color: #57606a;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.et-tutor-messages {
+  height: 260px;
+  overflow: auto;
+  padding: 10px;
+  background: #f6f8fa;
+}
+
+.et-tutor-msg {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+}
+
+.et-tutor-msg.user {
+  margin-left: 36px;
+  background: #ddf4ff;
+}
+
+.et-tutor-msg.assistant {
+  margin-right: 20px;
+  background: #fff;
+  border: 1px solid #d0d7de;
+}
+
+.et-tutor-status {
+  min-height: 18px;
+  padding: 0 10px;
+  color: #57606a;
+  font-size: 0.9em;
+}
+
+.et-tutor-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 10px 0;
+}
+
+.et-tutor-chip {
+  padding: 5px 8px;
+  background: #fff;
+  color: #0969da;
+}
+
+.et-tutor-form {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+}
+
+.et-tutor-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 38px;
+  max-height: 110px;
+  resize: vertical;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 7px 8px;
+  font: inherit;
+}
+
+.et-tutor-send {
+  flex: 0 0 auto;
+  padding: 0 12px;
+}
+
+.et-tutor[hidden],
+.et-tutor-panel[hidden] {
+  display: none;
+}
+
+@media (max-width: 620px) {
+  .et-tutor {
+    right: 10px;
+    bottom: 10px;
+    width: calc(100vw - 20px);
+  }
+
+  .et-tutor-messages {
+    height: 220px;
+  }
+}

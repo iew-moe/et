@@ -1,0 +1,10 @@
+name = "et-tutor"
+main = "tutor-worker.js"
+compatibility_date = "2026-07-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://iew-moe.github.io"
+ANTHROPIC_MODEL = "claude-sonnet-4-6"
+
+[secrets]
+required = ["ANTHROPIC_API_KEY"]

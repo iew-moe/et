@@ -58,6 +58,8 @@ if (!I18N[LANG]) LANG = 'de';
 let BASE_TITLE = I18N[LANG].title;
 document.title = `${BASE_TITLE} ${I18N[LANG].loading}`;
 let currentSeed = '';
+let currentTutorContext = null;
+let lastTutorCheckResult = null;
 
 function tr(k) {
   return (I18N[LANG] && I18N[LANG][k]) || I18N.de[k] || k;
@@ -267,6 +269,18 @@ async function generateWithMode(mode = 'seed') {
 
   document.getElementById('seed').value = data.seed;
   currentSeed = String(data.seed || '');
+  currentTutorContext = {
+    exerciseId: 'rlc',
+    lang: LANG,
+    seed: currentSeed,
+    title: tr('title'),
+    values: data.values,
+    tasks: data.tasks,
+    mode: data.mode === 1 ? 'polar' : 'cartesian',
+    tags: data.tags,
+    formulaSheetUrl: '../Formelsammlung_ET1.html',
+  };
+  lastTutorCheckResult = null;
   valuesEl.innerHTML = `
     <b>${tr('values')}</b><br>
     <i>R</i> = ${data.values.R}<br>
@@ -332,8 +346,41 @@ async function check() {
   const okCount = keys.reduce((acc, k) => acc + (data[k] ? 1 : 0), 0) + (data['nature'] ? 1 : 0);
   const total = keys.length + ('nature' in data ? 1 : 0);
   const percent = total ? Math.round((okCount / total) * 100) : 0;
+  lastTutorCheckResult = {
+    percent,
+    fields: data,
+  };
   updateProgress('rlc', currentSeed, percent);
 }
+
+window.getEtTutorContext = function () {
+  const userInputs = {};
+  for (const key of allFieldKeys) {
+    const el = document.getElementById(key);
+    if (el && String(el.value || '').trim()) {
+      userInputs[key] = String(el.value).trim();
+    }
+  }
+
+  const nature = document.querySelector('input[name="nature"]:checked');
+
+  return {
+    ...(currentTutorContext || {
+      exerciseId: 'rlc',
+      lang: LANG,
+      seed: document.getElementById('seed')?.value || '',
+      title: tr('title'),
+      formulaSheetUrl: '../Formelsammlung_ET1.html',
+    }),
+    lang: LANG,
+    seed: document.getElementById('seed')?.value || currentSeed,
+    visibleValuesText: document.getElementById('values')?.innerText || '',
+    visibleTasksText: document.getElementById('tasks')?.innerText || '',
+    userInputs,
+    selectedNature: nature ? nature.value : null,
+    checkResult: lastTutorCheckResult,
+  };
+};
 
 function hookEnterCheck(fn) {
   document.addEventListener('keydown', (e) => {

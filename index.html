@@ -17,6 +17,8 @@
     .thumb img { max-height: 150px; width: auto; display: block; border-radius: 6px; margin: 0 auto; }
     .exercise-title { font-size: 1.15rem; font-weight: 700; display: inline-block; margin: 2px 0 4px 0; }
     .exercise-head { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 2px 0 6px 0; }
+    .resource-link { margin: 0 0 18px 0; font-size: 1.05rem; }
+    .resource-link a { font-weight: 700; }
     .title-row { display: flex; align-items: center; justify-content: center; gap: 16px; }
     .progress { display: flex; align-items: center; }
     .progress-total .ring { width: 58px; height: 58px; font-size: 0.95rem; }
@@ -51,6 +53,10 @@
     <div class="title-row">
       <h1 id="title">Übungen zur Einführung in die Elektrotechnik</h1>
       <div id="prog-total" class="progress progress-total"></div>
+    </div>
+
+    <div class="resource-link">
+      <a id="lnk-formula" href="Formelsammlung_ET1.html">Formelsammlung ET1</a>
     </div>
 
     <ul>
@@ -114,7 +120,8 @@
         leiter: "1) Übung: Elektrischer Leiter",
         ps: "2) Übung: Reihen- und Parallelschaltung",
         rlc: "3) Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)",
-        super: "4) Übung: Überlagerungssatz (mehrere Quellen und R)"
+        super: "4) Übung: Überlagerungssatz (mehrere Quellen und R)",
+        formula: "Formelsammlung ET1"
       },
       en: {
         pageTitle: "Exercises: Introduction to Electrical Engineering",
@@ -123,7 +130,8 @@
         leiter: "1) Exercise: Electrical Conductor",
         ps: "2) Exercise: Series and Parallel Circuits",
         rlc: "3) Exercise: AC Complex Calculations – Phasor Diagram (RLC)",
-        super: "4) Exercise: Superposition Theorem (multiple sources and R)"
+        super: "4) Exercise: Superposition Theorem (multiple sources and R)",
+        formula: "Formula sheet ET1"
       }
     };
 
@@ -140,6 +148,7 @@
       document.getElementById("lnk-ps").textContent = t.ps;
       document.getElementById("lnk-rlc").textContent = t.rlc;
       document.getElementById("lnk-super").textContent = t.super;
+      document.getElementById("lnk-formula").textContent = t.formula;
       updateProgressUI();
       document.getElementById("lang").value = LANG;
     }
