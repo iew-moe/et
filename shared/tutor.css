@@ -76,7 +76,23 @@
   padding: 8px 10px;
   border-radius: 8px;
   line-height: 1.35;
-  white-space: pre-wrap;
+}
+
+.et-tutor-msg p {
+  margin: 0 0 0.65em;
+}
+
+.et-tutor-msg p:last-child {
+  margin-bottom: 0;
+}
+
+.et-tutor-msg ul {
+  margin: 0 0 0.65em 1.2em;
+  padding: 0;
+}
+
+.et-tutor-msg li {
+  margin: 0.15em 0;
 }
 
 .et-tutor-msg.user {

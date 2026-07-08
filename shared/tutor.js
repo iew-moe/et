@@ -5,16 +5,16 @@
     de: {
       toggle: "KI-Tutor",
       title: "KI-Tutor",
-      close: "Schliessen",
-      placeholder: "Beschreibe kurz, wo du haengst ...",
+      close: "Schließen",
+      placeholder: "Beschreibe kurz, wo du hängst ...",
       send: "Senden",
       setup: "Tutor noch nicht verbunden: Worker-URL fehlt.",
       loading: "Der Tutor denkt nach ...",
       error: "Der Tutor ist gerade nicht erreichbar.",
       intro: "Ich helfe dir schrittweise. Was hast du schon versucht?",
-      chipNext: "Was ist der naechste Schritt?",
-      chipCheck: "Pruefe meinen Ansatz.",
-      chipExplain: "Erklaere den passenden Begriff.",
+      chipNext: "Was ist der nächste Schritt?",
+      chipCheck: "Prüfe meinen Ansatz.",
+      chipExplain: "Erkläre den passenden Begriff.",
     },
     en: {
       toggle: "AI tutor",
@@ -44,6 +44,64 @@
     if (className) node.className = className;
     if (content) node.textContent = content;
     return node;
+  }
+
+  function appendFormattedInline(parent, textValue) {
+    const parts = String(textValue).split(/(\*\*[^*]+\*\*)/g);
+    for (const part of parts) {
+      if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+        const strong = document.createElement("strong");
+        strong.textContent = part.slice(2, -2);
+        parent.appendChild(strong);
+      } else if (part) {
+        parent.appendChild(document.createTextNode(part));
+      }
+    }
+  }
+
+  function renderMessageContent(target, message) {
+    const lines = String(message || "").split(/\r?\n/);
+    let list = null;
+    let paragraph = [];
+
+    function flushParagraph() {
+      if (!paragraph.length) return;
+      const p = document.createElement("p");
+      appendFormattedInline(p, paragraph.join(" "));
+      target.appendChild(p);
+      paragraph = [];
+    }
+
+    function flushList() {
+      if (!list) return;
+      target.appendChild(list);
+      list = null;
+    }
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushParagraph();
+        flushList();
+        continue;
+      }
+
+      const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+      if (bullet) {
+        flushParagraph();
+        if (!list) list = document.createElement("ul");
+        const item = document.createElement("li");
+        appendFormattedInline(item, bullet[1]);
+        list.appendChild(item);
+        continue;
+      }
+
+      flushList();
+      paragraph.push(trimmed);
+    }
+
+    flushParagraph();
+    flushList();
   }
 
   function ensureMathJax() {
@@ -103,7 +161,8 @@
   }
 
   function addMessage(container, role, message) {
-    const msg = el("div", `et-tutor-msg ${role}`, message);
+    const msg = el("div", `et-tutor-msg ${role}`);
+    renderMessageContent(msg, message);
     container.appendChild(msg);
     container.scrollTop = container.scrollHeight;
     ensureMathJax()
@@ -244,7 +303,7 @@
     send.type = "submit";
     form.append(input, send);
     const resize = el("div", "et-tutor-resize");
-    resize.title = lang() === "en" ? "Resize" : "Groesse aendern";
+    resize.title = lang() === "en" ? "Resize" : "Größe ändern";
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();
