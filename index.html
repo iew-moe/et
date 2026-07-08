@@ -96,6 +96,30 @@
           <a href="web-superposition/"><img src="superposition_topologies_50_clean/schematics/topo_028_I.png" alt="Überlagerung Übung"></a>
         </div>
       </li>
+      <li>
+        <div class="exercise-head">
+          <span id="lnk-sc" class="exercise-title">5) Übung: Single-Choice Aufgabensammlung</span>
+          <div id="prog-sc" class="progress"></div>
+        </div>
+        <div class="thumb">
+          <a href="web-single-choice/" aria-label="Single-Choice Übung">
+            <svg width="150" height="110" viewBox="0 0 150 110" xmlns="http://www.w3.org/2000/svg" role="img" style="display:block;margin:0 auto;border-radius:6px;">
+              <rect x="1" y="1" width="148" height="108" rx="8" fill="#fff" stroke="#d0d7de"/>
+              <g font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#1f2328">
+                <rect x="18" y="16" width="16" height="16" rx="3" fill="#fff" stroke="#57606a"/>
+                <text x="44" y="30">A</text>
+                <rect x="18" y="44" width="16" height="16" rx="3" fill="#fff" stroke="#57606a"/>
+                <path d="M20 50 l5 8 l9 -13" stroke="#2da44e" stroke-width="3" fill="none"/>
+                <text x="44" y="58">B</text>
+                <rect x="18" y="72" width="16" height="16" rx="3" fill="#fff" stroke="#57606a"/>
+                <text x="44" y="86">C</text>
+                <text x="78" y="58" font-size="13" fill="#57606a">Single</text>
+                <text x="78" y="76" font-size="13" fill="#57606a">Choice</text>
+              </g>
+            </svg>
+          </a>
+        </div>
+      </li>
     </ul>
 
     <div class="footer">
@@ -121,6 +145,7 @@
         ps: "2) Übung: Reihen- und Parallelschaltung",
         rlc: "3) Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)",
         super: "4) Übung: Überlagerungssatz (mehrere Quellen und R)",
+        sc: "5) Übung: Single-Choice Aufgabensammlung",
         formula: "Formelsammlung ET1"
       },
       en: {
@@ -131,6 +156,7 @@
         ps: "2) Exercise: Series and Parallel Circuits",
         rlc: "3) Exercise: AC Complex Calculations – Phasor Diagram (RLC)",
         super: "4) Exercise: Superposition Theorem (multiple sources and R)",
+        sc: "5) Exercise: Single-Choice Problem Collection",
         formula: "Formula sheet ET1"
       }
     };
@@ -148,6 +174,7 @@
       document.getElementById("lnk-ps").textContent = t.ps;
       document.getElementById("lnk-rlc").textContent = t.rlc;
       document.getElementById("lnk-super").textContent = t.super;
+      document.getElementById("lnk-sc").textContent = t.sc;
       document.getElementById("lnk-formula").textContent = t.formula;
       updateProgressUI();
       document.getElementById("lang").value = LANG;
@@ -182,6 +209,7 @@
         ["parallel_series", "prog-ps"],
         ["rlc", "prog-rlc"],
         ["superposition", "prog-super"],
+        ["single_choice", "prog-sc"],
       ];
       for (const [exId, elId] of map) {
         const el = document.getElementById(elId);

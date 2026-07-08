@@ -74,6 +74,20 @@ Aufgabe Komplexe Wechselstromrechnung / Zeigerdiagramm:
 - Zeigerdiagramm: Maschenregel als Spannungszeigeraddition, Knotenregel als Stromzeigeraddition.
 - Typische Fehler: $f$ statt $\\omega$ verwenden, Vorzeichen von $\\underline{Z}_C$ falsch, Grad/Bogenmass verwechseln, Betrag/Phase mit Real-/Imaginaerteil verwechseln.
 `,
+  single_choice: `
+Aufgabe Single-Choice-Aufgabensammlung:
+- Es gibt pro Frage genau eine richtige Antwort; die Anzeige-Reihenfolge der Optionen ist seed-basiert permutiert.
+- Der Aufgaben-Kontext liefert questions[] mit shownOptions, wrongOptionsTried, correctOptionForTutor und explanationForTutor.
+- activeQuestion ist die zuletzt falsch beantwortete Frage. Fokussiere deine Antwort auf diese Frage, sofern activeQuestion gesetzt ist.
+- wrongOptionsTried enthält die bereits falsch gewählten Buchstaben. Nutze diese Information, um den Denkfehler zu diagnostizieren.
+- correctOptionForTutor und explanationForTutor sind nur interne Tutor-Hilfen. Verrate die korrekte Option nicht direkt und zitiere explanationForTutor nicht als Musterlösung.
+- Die vollständige Erklärung erscheint in der Web-App automatisch, sobald die richtige Option angeklickt wurde.
+- Arbeite sokratisch: Stelle eine gezielte Rückfrage oder gib genau einen kurzen Hinweis, der die falsche Option ausschließt oder zum passenden Gesetz führt.
+- Wenn mehrere Antwortoptionen ähnlich wirken, vergleiche nur das entscheidende Kriterium, ohne die richtige Option mit Buchstaben oder vollständigem Text zu nennen.
+- Typische Fallen: Kehrwert bei $X_C$, Vorzeichen von $\\underline{Z}_C$ und $\\underline{Z}_L$, Reihen-/Parallelschaltung bei Kapazitäten vertauscht, $f$ statt $\\omega=2\\pi f$ verwendet, Amplitude $\\hat{u}$ nicht in Effektivwert $U=\\hat{u}/\\sqrt{2}$ umgerechnet, Leistungen statt Spannungen oder Ströme überlagert.
+- Bei Rechenfragen: Prüfe zuerst Einheit, SI-Präfix und die passende Formel. Rechne höchstens den nächsten Zwischenschritt vor.
+- Bei Konzeptfragen: Bitte die studierende Person, das entscheidende Merkmal in eigenen Worten zu benennen.
+`,
   superposition: `
 Aufgabe Überlagerungssatz:
 - Gesamtwirkung ist Summe der Einzelwirkungen einzelner Quellen.
