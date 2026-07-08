@@ -42,6 +42,27 @@ function compactContext(context) {
     selectedNature: context.selectedNature || null,
     checkResult: context.checkResult || null,
     topologyDescription: context.topologyDescription || null,
+    activeQuestion: Number.isFinite(Number(context.activeQuestion)) ? Number(context.activeQuestion) : null,
+    questions: Array.isArray(context.questions)
+      ? context.questions.slice(0, 20).map((question) => ({
+          number: question.number,
+          id: trimText(question.id, 120),
+          variant: question.variant ?? null,
+          topicId: trimText(question.topicId, 120),
+          topicName: trimText(question.topicName, 200),
+          question: trimText(question.question, 1000),
+          shownOptions: Array.isArray(question.shownOptions)
+            ? question.shownOptions.map((option) => trimText(option, 600))
+            : [],
+          wrongOptionsTried: Array.isArray(question.wrongOptionsTried)
+            ? question.wrongOptionsTried.map((option) => trimText(option, 20))
+            : [],
+          answeredCorrectly: !!question.answeredCorrectly,
+          solvedOnFirstAttempt: !!question.solvedOnFirstAttempt,
+          correctOptionForTutor: trimText(question.correctOptionForTutor, 20),
+          explanationForTutor: trimText(question.explanationForTutor, 1200),
+        }))
+      : null,
     formulaSheetUrl: context.formulaSheetUrl || "https://iew-moe.github.io/et/Formelsammlung_ET1.html",
   };
 }
