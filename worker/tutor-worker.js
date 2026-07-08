@@ -41,6 +41,7 @@ function compactContext(context) {
     userInputs: context.userInputs || {},
     selectedNature: context.selectedNature || null,
     checkResult: context.checkResult || null,
+    topologyDescription: context.topologyDescription || null,
     formulaSheetUrl: context.formulaSheetUrl || "https://iew-moe.github.io/et/Formelsammlung_ET1.html",
   };
 }

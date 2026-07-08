@@ -286,6 +286,15 @@ async function generateWithMode(mode = 'seed') {
     tasks: data.tasks,
     mode: data.mode === 1 ? 'polar' : 'cartesian',
     tags: data.tags,
+    topologyDescription: {
+      topology: data.topo,
+      schematicFile: data.schematic,
+      pairTag: data.tags?.zpair || null,
+      voltageTags: [data.tags?.v1, data.tags?.v2].filter(Boolean),
+      currentTags: [data.tags?.i1, data.tags?.i2].filter(Boolean),
+      resultMode: data.mode === 1 ? 'polar' : 'cartesian',
+      note: 'Diese Strukturinformation ersetzt das Schaltbild als verbindliche Tutor-Information. Die Topologiezeichen bedeuten: - = Reihe, || = parallel, Klammern geben Teilnetzwerke an.',
+    },
     formulaSheetUrl: '../Formelsammlung_ET1.html',
   };
   lastTutorCheckResult = null;

@@ -455,6 +455,26 @@ function checkAnswers() {
   updateProgress("superposition", String(CURRENT.seed || ""), percent);
 }
 
+function topologyDescription(topo, mode) {
+  if (!topo) return null;
+  return {
+    topologyId: topo.topology_id,
+    targetResistorId: topo.target_resistor_id,
+    resistorIds: topo.resistor_ids || [],
+    componentMap: topo.component_map || [],
+    wireEdges: topo.wire_edges || [],
+    netlist: mode === "I" ? topo.netlist_i : topo.netlist_v,
+    note: [
+      "Diese Topologiebeschreibung ist verbindlich.",
+      "Nutze Netlist, componentMap und wireEdges, um die Verschaltung zu bestimmen.",
+      "Leite Reihen- und Parallelschaltungen nicht frei aus Annahmen ab.",
+      "Bei deaktivierten Quellen gilt: ideale Spannungsquelle = Kurzschluss, ideale Stromquelle = Leerlauf.",
+      "Behalte die Zählrichtung des Zielwiderstands aus der Aufgabe bei.",
+      "Wenn die Verschaltung unklar ist, frage gezielt nach."
+    ].join(" ")
+  };
+}
+
 window.getEtTutorContext = function () {
   const userInputs = {};
   for (const id of ["in-p1", "in-p2", "in-gt"]) {
@@ -474,6 +494,7 @@ window.getEtTutorContext = function () {
       resistors: CURRENT.values && CURRENT.values.resistors,
       topologyId: CURRENT.topo && CURRENT.topo.topology_id,
     } : null,
+    topologyDescription: CURRENT ? topologyDescription(CURRENT.topo, CURRENT.mode) : null,
     visibleValuesText: document.getElementById("values")?.innerText || "",
     visibleTasksText: document.getElementById("tasks")?.innerText || "",
     userInputs,

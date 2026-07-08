@@ -291,6 +291,22 @@ window.getEtTutorContext = function () {
       unitLabel: state.unitLabel,
       coeffs: state.coeffs,
     } : null,
+    topologyDescription: state ? {
+      topologyId: state.topo.id,
+      topologyName: state.topo && state.topo.name ? state.topo.name[LANG] : '',
+      topologyTree: state.topo.tree,
+      componentKind: state.kind,
+      componentSymbol: symbol(state.kind),
+      componentCount: state.topo.n,
+      unitLabel: state.unitLabel,
+      coefficients: state.coeffs,
+      valuesSI: state.vals,
+      equivalentSI: state.eq,
+      rule: state.kind === 'C'
+        ? 'Kapazitaeten: parallel addieren, in Reihe reziprok addieren.'
+        : 'Widerstaende und Induktivitaeten: in Reihe addieren, parallel reziprok addieren.',
+      note: 'Die topologyTree-Struktur ersetzt das Bild als verbindliche Tutor-Information. S bedeutet Reihe, P bedeutet parallel, Zahlen sind Bauteilindizes ab 0.',
+    } : null,
     visibleValuesText: document.getElementById('values')?.innerText || '',
     visibleTasksText: document.getElementById('tasks')?.innerText || '',
     userInputs: input && input.value.trim() ? { inp_eq: input.value.trim() } : {},

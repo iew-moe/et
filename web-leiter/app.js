@@ -1136,6 +1136,33 @@ window.getEtTutorContext = function () {
       geometry_value_mm: CURRENT.geom_val_mm,
       current_density_target: CURRENT.S_target,
     } : null,
+    topologyDescription: CURRENT ? {
+      mode: CURRENT.mode,
+      schematicFile: schematicName(CURRENT),
+      circuit: {
+        source: CURRENT.source_type === "V" ? "ideale Spannungsquelle" : "ideale Stromquelle",
+        sourceType: CURRENT.source_type,
+        sourceValue: CURRENT.source_value,
+        conductor: "Leiterwiderstand R_L(T) aus Material, Laenge und Querschnitt",
+        load: CURRENT.RL_ohm > 0 ? "Verbraucher R_V in Reihe mit dem Leiter" : "kein zusaetzlicher Verbraucher",
+        loadOhm: CURRENT.RL_ohm,
+        connection: CURRENT.RL_ohm > 0
+          ? "Quelle, Leiterwiderstand und Verbraucher werden als Reihenschaltung betrachtet."
+          : "Quelle und Leiterwiderstand bilden die relevante Schaltung.",
+      },
+      geometry: {
+        kind: CURRENT.geom_kind || null,
+        valueMm: CURRENT.geom_val_mm || null,
+        areaMm2: CURRENT.A_mm2 || CURRENT.A_dim_mm2 || (CURRENT.result && CURRENT.result.A_mm2) || null,
+        dimensionTargetCurrentDensity: CURRENT.S_target || null,
+      },
+      material: CURRENT.material ? {
+        name: CURRENT.material.name,
+        rhoOhmMm2PerM: CURRENT.material.rho,
+        alphaPerK: CURRENT.material.alpha,
+      } : null,
+      note: "Diese Beschreibung ersetzt das Schaltbild als verbindliche Tutor-Information. Bei Spannungsquelle und Last liegt eine Reihenschaltung vor; bei Stromquelle ist der Strom vorgegeben.",
+    } : null,
     visibleValuesText: document.getElementById("values")?.innerText || "",
     visibleTasksText: document.getElementById("tasks")?.innerText || "",
     userInputs,
