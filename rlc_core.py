@@ -558,7 +558,8 @@ def generate(seed_text='', lang='de'):
     # also include impedances asked in the input table
     add_row('<u>Z</u><sub>C</sub>', Z['C'], 'Ohm')
     add_row('<u>Z</u><sub>L</sub>', Z['L'], 'Ohm')
-    add_row(f"<u>Z</u><sub>{zpair_tag}</sub>", Zpar, 'Ohm')
+    Zpair = res['Zseries'] if res['type'] == 'parallel_series' else Zpar
+    add_row(f"<u>Z</u><sub>{zpair_tag}</sub>", Zpair, 'Ohm')
     add_row('<u>Z</u>', Ztot, 'Ohm')
 
     for name, z in vectors.items():
@@ -609,6 +610,7 @@ def check(inputs):
         return {}
     Z = STATE['Z']
     Zpar = STATE['Zpar']
+    Zpair = STATE['res']['Zseries'] if STATE['res']['type'] == 'parallel_series' else Zpar
     Ztot = STATE['Ztot']
     I = STATE['I']
     S = STATE['V'] * complex(I).conjugate()
@@ -642,7 +644,7 @@ def check(inputs):
 
     out = {}
     for k, ref in {
-        'zpar_re': Zpar.real, 'zpar_im': Zpar.imag,
+        'zpar_re': Zpair.real, 'zpar_im': Zpair.imag,
         'zc_re': Z['C'].real, 'zc_im': Z['C'].imag,
         'zl_re': Z['L'].real, 'zl_im': Z['L'].imag,
         'z_re': Ztot.real, 'z_im': Ztot.imag,
@@ -662,7 +664,7 @@ def check(inputs):
         return math.degrees(cmath.phase(z))
 
     for k, ref in {
-        'zpar_mag': abs(Zpar), 'zpar_phase': ang(Zpar),
+        'zpar_mag': abs(Zpair), 'zpar_phase': ang(Zpair),
         'zc_mag': abs(Z['C']), 'zc_phase': ang(Z['C']),
         'zl_mag': abs(Z['L']), 'zl_phase': ang(Z['L']),
         'z_mag': abs(Ztot), 'z_phase': ang(Ztot),
