@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taschenrechner</title>
+  <script>
+    if (new URLSearchParams(window.location.search).get("embed") === "1") {
+      document.documentElement.classList.add("embed-mode");
+    }
+  </script>
+  <style>
+    :root {
+      --body: #262425;
+      --body2: #151516;
+      --key: #f5f5f2;
+      --key2: #d8d9dc;
+      --accent: #244ca0;
+      --highlight: #ffe36a;
+      --screen: #dce9df;
+      --ink: #111512;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 20px;
+      background: #f6f8fa;
+      color: #1f2328;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      max-width: 1120px;
+      margin: 0 auto 14px auto;
+    }
+
+    .topbar h1 { margin: 0; font-size: 1.55rem; }
+
+    .layout {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(300px, 390px) minmax(300px, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .calculator {
+      width: min(100%, 370px);
+      border: 6px solid #c8c9cb;
+      border-radius: 32px 32px 45px 45px;
+      padding: 19px 17px 22px;
+      background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 2px, rgba(0,0,0,0.025) 2px 4px),
+        linear-gradient(180deg, var(--body), var(--body2));
+      box-shadow: 0 18px 36px rgba(31,35,40,0.25), inset 0 1px 0 rgba(255,255,255,0.16);
+      color: #fff;
+    }
+
+    html.embed-mode body {
+      margin: 0;
+      padding: 8px;
+      overflow-x: hidden;
+      background: transparent;
+    }
+
+    html.embed-mode .topbar,
+    html.embed-mode aside {
+      display: none;
+    }
+
+    html.embed-mode .layout {
+      display: block;
+      max-width: none;
+      margin: 0;
+    }
+
+    html.embed-mode .calculator {
+      margin: 0 auto;
+      box-shadow: 0 6px 12px rgba(31,35,40,0.2), inset 0 1px 0 rgba(255,255,255,0.16);
+    }
+
+    .screen-wrap {
+      border-radius: 7px 7px 12px 12px;
+      padding: 11px 12px 13px;
+      background: #080909;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
+      margin-bottom: 14px;
+    }
+
+    .screen {
+      min-height: 130px;
+      border-radius: 3px;
+      border: 2px solid #9aa69d;
+      background: var(--screen);
+      color: var(--ink);
+      padding: 8px 9px;
+      font-family: "Cambria Math", "Consolas", "Segoe UI Symbol", serif;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.22);
+      overflow: hidden;
+    }
+
+    .indicators {
+      height: 17px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: #354035;
+      font: 700 0.68rem "Segoe UI", Arial, sans-serif;
+      border-bottom: 1px solid rgba(0,0,0,0.18);
+      margin-bottom: 5px;
+      padding-bottom: 3px;
+      white-space: nowrap;
+    }
+
+    .math-line {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 1.24rem;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+
+    .input-cursor {
+      display: inline-block;
+      width: 0;
+      height: 1.15em;
+      border-left: 2px solid #253a2b;
+      vertical-align: -0.18em;
+    }
+
+    .result-line {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      border-top: 1px solid rgba(0,0,0,0.15);
+      margin-top: 5px;
+      padding-top: 6px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+
+    .result-line.compact { font-size: 1.12rem; }
+    .result-line.very-compact { font-size: 0.96rem; }
+    .result-line mjx-container { max-width: 100%; margin: 0 !important; }
+    .result-line mjx-container svg { max-width: 100%; height: auto; }
+
+    .message-line {
+      min-height: 17px;
+      margin-top: 4px;
+      color: #445044;
+      font: 0.78rem "Segoe UI", Arial, sans-serif;
+      text-align: left;
+    }
+
+    .key {
+      width: 100%;
+      min-width: 0;
+      min-height: 35px;
+      border: 1px solid #090909;
+      border-radius: 5px 5px 8px 8px;
+      color: #f4f4f4;
+      font: 600 0.96rem "Segoe UI", Arial, sans-serif;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .key:active,
+    .key.active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #090909, 0 2px 4px rgba(0,0,0,0.35);
+    }
+
+    .function-grid,
+    .number-grid {
+      display: grid;
+      gap: 5px 7px;
+    }
+
+    .function-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      margin: 7px 0 10px;
+    }
+
+    .number-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+    .function-key {
+      background: linear-gradient(#484849, #272728);
+      box-shadow: 0 3px 0 #080808, 0 4px 6px rgba(0,0,0,0.35);
+    }
+
+    .function-grid .function-key { font-size: 1.08rem; }
+    .function-grid .math-key { font-size: 1.24rem; }
+    .function-grid .compact-label { font-size: 0.9rem; }
+    .function-grid .format-key { font-size: 0.86rem; }
+
+    .number-key {
+      min-height: 39px;
+      background: linear-gradient(#fff, var(--key2));
+      color: #151515;
+      font-size: 1.28rem;
+      box-shadow: 0 3px 0 #9b9da1, 0 5px 7px rgba(0,0,0,0.3);
+    }
+
+    .control-key {
+      min-height: 39px;
+      background: linear-gradient(#315db6, #1d3f8d);
+      color: #fff;
+      font-size: 1.08rem;
+      box-shadow: 0 3px 0 #102657, 0 5px 7px rgba(0,0,0,0.35);
+    }
+
+    .math-key { font-family: "Cambria Math", "Segoe UI Symbol", serif; font-size: 1.12rem; }
+    .compact-label { font-size: 0.76rem; }
+    .format-key { font-size: 0.72rem; white-space: nowrap; }
+    .operator-key { font-size: 1.7rem; }
+    .ans-key { font-size: 1.15rem; }
+    .exp-key { font-size: 1.05rem; white-space: nowrap; }
+    .exp-key sup { font-size: 0.72em; }
+
+    .mode-cursor-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .mode-stack { display: grid; gap: 7px; }
+    .mode-stack .pill { width: 100%; }
+
+    .pill {
+      border: 1px solid #0c0c0c;
+      border-radius: 5px 5px 7px 7px;
+      padding: 7px 5px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(#4a4a4b, #282829);
+      color: #f1f1f1;
+      box-shadow: 0 2px 0 #090909;
+    }
+
+    .pill .selected { color: var(--highlight); }
+
+    .output-command {
+      margin-left: 0.35em;
+      color: #425847;
+      font-size: 0.78em;
+      white-space: nowrap;
+    }
+
+    .cursor-pad {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 31px);
+      grid-template-rows: repeat(3, 31px);
+      width: 105px;
+      height: 105px;
+      place-content: center;
+      margin: 0 auto;
+      border: 1px solid #080808;
+      border-radius: 50%;
+      background: linear-gradient(#4b4b4c, #202021);
+      box-shadow: 0 3px 0 #080808, inset 0 1px 0 rgba(255,255,255,0.16);
+    }
+
+    .cursor-key {
+      position: relative;
+      z-index: 1;
+      border: 0;
+      background: transparent;
+      color: #f4f4f4;
+      font: 700 1rem "Segoe UI Symbol", "Segoe UI", sans-serif;
+      cursor: pointer;
+    }
+
+    .cursor-key:active { color: var(--highlight); transform: translateY(1px); }
+    .cursor-up { grid-column: 2; grid-row: 1; }
+    .cursor-left { grid-column: 1; grid-row: 2; }
+    .cursor-right { grid-column: 3; grid-row: 2; }
+    .cursor-down { grid-column: 2; grid-row: 3; }
+    .panel {
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      background: #fff;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .panel h2,
+    .panel h3 {
+      margin-top: 0;
+    }
+
+    .panel code {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 4px;
+      padding: 1px 4px;
+    }
+
+    .examples {
+      display: grid;
+      gap: 8px;
+    }
+
+    .example-btn {
+      text-align: left;
+      border: 1px solid #d0d7de;
+      border-radius: 7px;
+      background: #f6f8fa;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+
+    .history {
+      display: grid;
+      gap: 6px;
+      max-height: 270px;
+      overflow: auto;
+    }
+
+    .history-item {
+      border-bottom: 1px solid #eaeef2;
+      padding-bottom: 6px;
+      font-family: "Cambria Math", "Segoe UI Symbol", serif;
+    }
+
+    .muted { color: #57606a; font-size: 0.92rem; }
+
+    @media (max-width: 820px) {
+      body { margin: 12px; }
+      .layout { grid-template-columns: 1fr; }
+      .calculator { margin: 0 auto; }
+    }
+
+    @media (max-width: 420px) {
+      .calculator { padding-inline: 12px; }
+      .function-grid,
+      .number-grid { column-gap: 5px; }
+      .function-grid .format-key { font-size: 0.72rem; }
+      .function-grid .compact-label { font-size: 0.82rem; }
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["\\(", "\\)"], ["$", "$"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="fe2809e9-3433-432f-be27-22f206dfcfae"></script>
+</head>
+<body>
+  <div class="topbar">
+    <p><a href="../index.html" data-i18n="backToOverview">Zur Übungsübersicht</a></p>
+    <h1 data-i18n="pageTitle">Taschenrechner</h1>
+    <div>
+      <label for="lang" data-i18n="languageLabel">Sprache:</label>
+      <select id="lang">
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </div>
+
+  <main class="layout">
+    <section class="calculator" aria-label="Taschenrechner" data-i18n-aria="calculatorAria">
+      <div class="screen-wrap">
+        <div class="screen" aria-live="polite">
+          <div class="indicators">
+            <span id="calculator-mode-indicator">COMPLEX</span>
+            <span id="angle-indicator">DEG</span>
+            <span id="format-indicator">a+bi</span>
+            <span id="cursor-mode-indicator" hidden>CURSOR</span>
+          </div>
+          <div id="input-display" class="math-line"></div>
+          <div id="result-display" class="result-line"></div>
+          <div id="message-display" class="message-line"></div>
+        </div>
+      </div>
+
+      <div id="keys">
+        <div class="mode-cursor-layout">
+          <div class="mode-stack" aria-label="Rechen- und Winkelmodus" data-i18n-aria="modeStackAria">
+            <button id="calculator-mode-toggle" class="pill" type="button">
+              <span data-option="normal">NORMAL</span> / <span data-option="complex">COMPLEX</span>
+            </button>
+            <button id="angle-mode-toggle" class="pill" type="button">
+              <span data-option="deg">DEG</span> / <span data-option="rad">RAD</span>
+            </button>
+            <button id="result-format-toggle" class="pill" type="button">
+              <span data-option="rect">a+bi</span> / <span data-option="polar">r∠θ</span>
+            </button>
+          </div>
+
+          <div class="cursor-pad" aria-label="Cursortasten" data-i18n-aria="cursorPadAria">
+            <button class="cursor-key cursor-up" type="button" data-action="cursor" data-value="up" aria-label="Ältere Rechnung" data-i18n-aria="olderCalculationAria">▲</button>
+            <button class="cursor-key cursor-left" type="button" data-action="cursor" data-value="left" aria-label="Cursor nach links" data-i18n-aria="cursorLeftAria">◀</button>
+            <button class="cursor-key cursor-right" type="button" data-action="cursor" data-value="right" aria-label="Cursor nach rechts" data-i18n-aria="cursorRightAria">▶</button>
+            <button class="cursor-key cursor-down" type="button" data-action="cursor" data-value="down" aria-label="Neuere Rechnung" data-i18n-aria="newerCalculationAria">▼</button>
+          </div>
+        </div>
+
+        <div class="function-grid" aria-label="Funktions- und Komplexzahlentasten" data-i18n-aria="functionKeysAria">
+          <button class="key function-key math-key" data-action="insert" data-value="i" aria-label="Imaginäre Einheit i" data-i18n-aria="imaginaryUnitAria">i</button>
+          <button class="key function-key math-key" data-action="insert" data-value="∠" aria-label="Polarwinkel" data-i18n-aria="polarAngleAria">∠</button>
+          <button class="key function-key math-key" data-action="insert" data-value="°" aria-label="Grad" data-i18n-aria="degreeAria">°</button>
+          <button class="key function-key" data-action="insert" data-value="Abs(" aria-label="Betrag" data-i18n-aria="magnitudeAria">Abs</button>
+          <button class="key function-key" data-action="insert" data-value="Arg(" aria-label="Argument oder Phase" data-i18n-aria="argumentAria">Arg</button>
+          <button class="key function-key compact-label" data-action="insert" data-value="Conjg(" aria-label="Konjugierte komplexe Zahl" data-i18n-aria="conjugateAria">Conjg</button>
+          <button class="key function-key" data-action="insert" data-value="Re(" aria-label="Realteil" data-i18n-aria="realPartAria">Re</button>
+          <button class="key function-key" data-action="insert" data-value="Im(" aria-label="Imaginärteil" data-i18n-aria="imaginaryPartAria">Im</button>
+          <button class="key function-key format-key" data-action="to-format" data-value="rect" aria-label="In Standardform a plus b i umwandeln" data-i18n-aria="toRectAria">→a+bi</button>
+          <button class="key function-key format-key" data-action="to-format" data-value="polar" aria-label="In Versorform r Winkel theta umwandeln" data-i18n-aria="toPolarAria">→r∠θ</button>
+          <button class="key function-key math-key" data-action="insert" data-value="(">(</button>
+          <button class="key function-key math-key" data-action="insert" data-value=")">)</button>
+          <button class="key function-key math-key" data-action="insert" data-value="e" aria-label="Eulersche Zahl e" data-i18n-aria="eulerNumberAria">e</button>
+          <button class="key function-key math-key" data-action="insert" data-value="π" aria-label="Kreiszahl Pi" data-i18n-aria="piAria">π</button>
+          <button class="key function-key" data-action="toggle-sign">(−)</button>
+          <button class="key function-key math-key" data-action="insert" data-value="^2">x²</button>
+          <button class="key function-key math-key" data-action="insert" data-value="^-1">x⁻¹</button>
+          <button class="key function-key math-key" data-action="insert" data-value="^" aria-label="Potenz x hoch y" data-i18n-aria="powerAria">x<sup>y</sup></button>
+        </div>
+
+        <div class="number-grid" aria-label="Zahlen- und Rechentasten" data-i18n-aria="numberKeysAria">
+          <button class="key number-key" data-action="insert" data-value="7">7</button>
+          <button class="key number-key" data-action="insert" data-value="8">8</button>
+          <button class="key number-key" data-action="insert" data-value="9">9</button>
+          <button class="key control-key" data-action="back">DEL</button>
+          <button class="key control-key" data-action="clear">AC</button>
+
+          <button class="key number-key" data-action="insert" data-value="4">4</button>
+          <button class="key number-key" data-action="insert" data-value="5">5</button>
+          <button class="key number-key" data-action="insert" data-value="6">6</button>
+          <button class="key number-key operator-key" data-action="insert" data-value="*">×</button>
+          <button class="key number-key operator-key" data-action="insert" data-value="/">÷</button>
+
+          <button class="key number-key" data-action="insert" data-value="1">1</button>
+          <button class="key number-key" data-action="insert" data-value="2">2</button>
+          <button class="key number-key" data-action="insert" data-value="3">3</button>
+          <button class="key number-key operator-key" data-action="insert" data-value="+">+</button>
+          <button class="key number-key operator-key" data-action="insert" data-value="-">−</button>
+
+          <button class="key number-key" data-action="insert" data-value="0">0</button>
+          <button class="key number-key" data-action="insert" data-value=".">.</button>
+          <button class="key number-key exp-key" data-action="insert" data-value="E">×10<sup>x</sup></button>
+          <button class="key number-key ans-key" data-action="insert" data-value="Ans">Ans</button>
+          <button class="key number-key operator-key" data-action="eval">=</button>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <section class="panel">
+        <h2 id="help-title" data-i18n="helpTitle">Komplex-Modus für ET1</h2>
+        <p id="help-text" data-i18n-html="helpText">
+          Dieser Teil-Emulator bildet keinen vollständigen wissenschaftlichen Rechner nach. Er trainiert die Bedienlogik für komplexe Zahlen: Eingabe der imaginären Einheit mit <code>i</code>, Polarform mit <code>∠</code>, Winkelmaß und Ergebnisformat.
+        </p>
+        <p class="muted" data-i18n="sourceIntro">
+          Quellen zur Bedienlogik: Hersteller-Kurzanleitung und Supportdokumentation zur Komplex-Anwendung. Links stehen unten.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h3 data-i18n="examplesTitle">Beispiele</h3>
+        <div class="examples">
+          <button class="example-btn" data-example="2+3i" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n-html="exampleRect">2+3i → kartesisch</button>
+          <button class="example-btn" data-example="5∠30" data-calc-mode="complex" data-angle-mode="deg" data-result-format="polar" data-i18n-html="examplePolar">5∠30 → Polarwert im Gradmaß</button>
+          <button class="example-btn" data-example="(3-2i)*(5+6i)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleMultiply">Multiplikation komplexer Zahlen</button>
+          <button class="example-btn" data-example="Arg(1+2i)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleArgument">Argument im Gradmaß bestimmen</button>
+          <button class="example-btn" data-example="Abs(3+4i)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleMagnitude">Betrag bestimmen</button>
+          <button class="example-btn" data-example="1/(i*2*pi*50*10E-6)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleDivision">Division komplexer Zahlen</button>
+          <button class="example-btn" data-example="3*e^(-j*90°)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n-html="exampleEuler">Eulerform 3·e<sup>−j·90°</sup></button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3 data-i18n="keyboardTitle">Bedienung mit Tastatur</h3>
+        <p data-i18n-html="keyboardText1">
+          Zahlen und <code>+ - * / ^ ( )</code> direkt eingeben. Die Tastatur akzeptiert <code>i</code> und <code>j</code> für die imaginäre Einheit; angezeigt wird einheitlich <code>i</code>.
+          <code>e</code> für die Eulersche Zahl, <code>E</code> für <code>×10ˣ</code> und <code>°</code> für einen Gradwert,
+          <code>Ans</code> oder <code>ANS</code> für das letzte Ergebnis,
+          <code>@</code> oder <code>&lt;</code> für <code>∠</code>, <code>Enter</code> für EXE,
+          <code>Backspace</code> für DEL, <code>Esc</code> für AC.
+        </p>
+        <p data-i18n-html="keyboardText2">
+          Mit <code>↑</code>/<code>↓</code> frühere Rechnungen aufrufen und mit <code>←</code>/<code>→</code>
+          den Ausdruck bearbeiten. Das letzte Ergebnis steht für Folgerechnungen als <code>Ans</code> bereit.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h3 data-i18n="historyTitle">Verlauf</h3>
+        <div id="history" class="history muted">Noch keine Rechnung.</div>
+      </section>
+
+      <section class="panel">
+        <h3 data-i18n="manualTitle">Manual-Notizen</h3>
+        <ul>
+          <li data-i18n-html="manualMode">Mit <code>Normal</code> und <code>Komplex</code> wird zwischen reellen und komplexen Berechnungen gewechselt.</li>
+          <li data-i18n-html="manualModeError">Im Normalmodus erzeugen <code>i</code>, Polarform und komplexe Funktionen einen Modusfehler.</li>
+          <li data-i18n-html="manualApplication">Beim Referenzrechner ist „Komplexe Zahlen“ ein eigener Anwendungsmodus.</li>
+          <li data-i18n-html="manualInput">Komplexe Zahlen können als <code>a+bi</code> oder <code>r∠θ</code> eingegeben werden.</li>
+          <li data-i18n="manualCommands">Direkte Befehle: Betrag, Argument, Konjugierte, Realteil, Imaginärteil sowie Umwandlung in Versor- und Standardform.</li>
+          <li data-i18n="manualAngle">Das Winkelmaß wird im Setup zwischen Gradmaß und Bogenmaß umgestellt.</li>
+          <li data-i18n-html="manualDefaultFormat">Die Setup-Umschaltung <code>a+bi / r∠θ</code> bestimmt das reguläre Ergebnisformat.</li>
+          <li data-i18n-html="manualOneShot">Die schwarzen Tasten <code>→a+bi</code> und <code>→r∠θ</code> wandeln nur das aktuelle beziehungsweise nächste Ergebnis um und ändern die Setup-Einstellung nicht.</li>
+          <li data-i18n-html="manualCursor">Die Cursortasten blättern durch den Rechnungsverlauf und öffnen Ausdrücke zur Bearbeitung; Ergebnisse werden über <code>Ans</code> weiterverwendet.</li>
+        </ul>
+        <p class="muted">
+          <a href="https://www.casio-schulrechner.de/materialdatenbanken/data/Kurzanleitung_FX-991DE%20X.pdf" target="_blank" rel="noopener noreferrer" data-i18n="sourceQuickGuide">Referenz-Kurzanleitung (PDF)</a><br>
+          <a href="https://www.casio-schulrechner.de/materialdatenbanken/data/CASIO%20forum%202017_2%20AT.pdf" target="_blank" rel="noopener noreferrer" data-i18n="sourceArticle">Hersteller-Fachbeitrag: Komplexe Zahlen (PDF)</a><br>
+          <a href="https://support.casio.com/global/de/calc/manual/fx-87DECW_991DECW_de/using_calculator_apps/complex_number_calculations.html" target="_blank" rel="noopener noreferrer" data-i18n="sourceComplexDocs">Referenzdokumentation: Komplexe Zahlen</a><br>
+          <a href="https://support.casio.com/global/de/calc/manual/fx-87DECW_991DECW_de/calculator_apps_and_menus/using_the_settings_menu.html" target="_blank" rel="noopener noreferrer" data-i18n="sourceSettingsDocs">Referenzdokumentation: Winkelmaß und Ergebnisformat</a>
+        </p>
+      </section>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

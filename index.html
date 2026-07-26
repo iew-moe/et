@@ -56,7 +56,10 @@
     </div>
 
     <div class="resource-link">
-      <a id="lnk-formula" href="Formelsammlung_ET1.html">Formelsammlung ET1</a>
+      <a id="lnk-formula" href="Formelsammlung_ET1.html">Formelsammlung</a>
+    </div>
+    <div class="resource-link">
+      <a id="lnk-emulator" href="web-calculator-emulator/index.html">Taschenrechner</a>
     </div>
 
     <ul>
@@ -66,7 +69,7 @@
           <div id="prog-leiter" class="progress"></div>
         </div>
         <div class="thumb">
-          <a href="web-leiter/"><img src="schematics/leiter_topologies_clean/leiter_I_no_load.png" alt="Leiter Übung"></a>
+          <a href="web-leiter/index.html"><img src="schematics/leiter_topologies_clean/leiter_I_no_load.png" alt="Leiter Übung"></a>
         </div>
       </li>
       <li>
@@ -75,7 +78,7 @@
           <div id="prog-ps" class="progress"></div>
         </div>
         <div class="thumb">
-          <a href="web-parallel-series/"><img src="schematics/parallel_series_topos_clean/parallel_series_C_2P.png" alt="Parallel/Serie Übung"></a>
+          <a href="web-parallel-series/index.html"><img src="schematics/parallel_series_topos_clean/parallel_series_C_2P.png" alt="Parallel/Serie Übung"></a>
         </div>
       </li>
       <li>
@@ -84,7 +87,7 @@
           <div id="prog-rlc" class="progress"></div>
         </div>
         <div class="thumb">
-          <a href="web-rlc/"><img src="schematics/C_R__L.png" alt="RLC Übung"></a>
+          <a href="web-rlc/index.html"><img src="schematics/C_R__L.png" alt="RLC Übung"></a>
         </div>
       </li>
       <li>
@@ -93,7 +96,7 @@
           <div id="prog-super" class="progress"></div>
         </div>
         <div class="thumb">
-          <a href="web-superposition/"><img src="superposition_topologies_50_clean/schematics/topo_028_I.png" alt="Überlagerung Übung"></a>
+          <a href="web-superposition/index.html"><img src="superposition_topologies_50_clean/schematics/topo_028_I.png" alt="Überlagerung Übung"></a>
         </div>
       </li>
       <li>
@@ -102,7 +105,7 @@
           <div id="prog-sc" class="progress"></div>
         </div>
         <div class="thumb">
-          <a href="web-single-choice/" aria-label="Single-Choice Übung">
+          <a href="web-single-choice/index.html" aria-label="Single-Choice Übung">
             <svg width="150" height="110" viewBox="0 0 150 110" xmlns="http://www.w3.org/2000/svg" role="img" style="display:block;margin:0 auto;border-radius:6px;">
               <rect x="1" y="1" width="148" height="108" rx="8" fill="#fff" stroke="#d0d7de"/>
               <g font-family="Segoe UI, Arial, sans-serif" font-size="16" fill="#1f2328">
@@ -131,7 +134,7 @@
       </a>
     </div>
     <div class="footer">
-      Stand dieser Web-App: 7.7.2026 – bitte melden Sie Fehler, Anregungen und Verbesserungsvorschläge per E-Mail direkt an den zuständigen Dozenten
+      Stand dieser Web-App: 26.7.2026 – bitte melden Sie Fehler, Anregungen und Verbesserungsvorschläge per E-Mail direkt an den zuständigen Dozenten
     </div>
   </div>
 
@@ -146,7 +149,8 @@
         rlc: "3) Übung: Komplexe Wechselstromrechnung – Zeigerdiagramm (RLC)",
         super: "4) Übung: Überlagerungssatz (mehrere Quellen und R)",
         sc: "5) Übung: Single-Choice Aufgabensammlung",
-        formula: "Formelsammlung ET1"
+        formula: "Formelsammlung",
+        emulator: "Taschenrechner"
       },
       en: {
         pageTitle: "Exercises: Introduction to Electrical Engineering",
@@ -157,7 +161,8 @@
         rlc: "3) Exercise: AC Complex Calculations – Phasor Diagram (RLC)",
         super: "4) Exercise: Superposition Theorem (multiple sources and R)",
         sc: "5) Exercise: Single-Choice Problem Collection",
-        formula: "Formula sheet ET1"
+        formula: "Formula sheet",
+        emulator: "Calculator"
       }
     };
 
@@ -176,6 +181,7 @@
       document.getElementById("lnk-super").textContent = t.super;
       document.getElementById("lnk-sc").textContent = t.sc;
       document.getElementById("lnk-formula").textContent = t.formula;
+      document.getElementById("lnk-emulator").textContent = t.emulator;
       updateProgressUI();
       document.getElementById("lang").value = LANG;
     }

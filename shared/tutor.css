@@ -6,6 +6,7 @@
   height: auto;
   z-index: 50;
   font-family: "Segoe UI", Arial, sans-serif;
+  pointer-events: none;
 }
 
 .et-tutor-toggle,
@@ -24,6 +25,7 @@
   padding: 9px 12px;
   font-weight: 700;
   box-shadow: 0 4px 14px rgba(31, 35, 40, 0.2);
+  pointer-events: auto;
 }
 
 .et-tutor-panel {
@@ -42,6 +44,7 @@
   max-width: calc(100vw - 36px);
   max-height: calc(100vh - 90px);
   overflow: auto;
+  pointer-events: auto;
 }
 
 .et-tutor-header {
