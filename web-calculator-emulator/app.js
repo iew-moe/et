@@ -9,6 +9,8 @@ const I18N = {
     rad: 'RAD',
     noHistory: 'Noch keine Rechnung.',
     cursor: 'Cursormodus',
+    stored: 'Ergebnis in {name} gespeichert',
+    noResultToStore: 'Kein Ergebnis zum Speichern',
     pageTitle: `Taschenrechner`,
     backToOverview: `Zur Übungsübersicht`,
     languageLabel: `Sprache:`,
@@ -34,7 +36,15 @@ const I18N = {
     piAria: `Kreiszahl Pi`,
     powerAria: `Potenz x hoch y`,
     numberKeysAria: `Zahlen- und Rechentasten`,
+    memoryKeysAria: `Tasten für die Speicher A, B und C`,
+    storeAAria: `Aktuelles Ergebnis in A speichern`,
+    insertAAria: `Variable A einfügen`,
+    storeBAria: `Aktuelles Ergebnis in B speichern`,
+    insertBAria: `Variable B einfügen`,
+    storeCAria: `Aktuelles Ergebnis in C speichern`,
+    insertCAria: `Variable C einfügen`,
     expressionAria: `Rechenausdruck. Text kann markiert, kopiert und eingefügt werden.`,
+    resultAria: `Antwort. Das Ergebnis kann markiert und kopiert werden.`,
     helpTitle: `Komplex-Modus für ET1`,
     helpText: `Dieser Teil-Emulator bildet keinen vollständigen wissenschaftlichen Rechner nach. Er trainiert die Bedienlogik für komplexe Zahlen: Eingabe der imaginären Einheit mit <code>i</code>, Polarform mit <code>∠</code>, Winkelmaß und Ergebnisformat.`,
     sourceIntro: `Quellen zur Bedienlogik: Hersteller-Kurzanleitung und Supportdokumentation zur Komplex-Anwendung. Links stehen unten.`,
@@ -48,7 +58,7 @@ const I18N = {
     exampleEuler: `Eulerform 3·e<sup>−j·90°</sup>`,
     keyboardTitle: `Bedienung mit Tastatur`,
     keyboardText1: `Zahlen und <code>+ - * / ^ ( )</code> direkt eingeben. Die Tastatur akzeptiert <code>i</code> und <code>j</code> für die imaginäre Einheit; angezeigt wird einheitlich <code>i</code>. <code>e</code> steht für die Eulersche Zahl. <code>E</code> fügt <code>×10^(</code> ein; nach dem Exponenten muss die schließende Klammer <code>)</code> eingegeben werden. <code>°</code> steht für einen Gradwert, <code>Ans</code> oder <code>ANS</code> für das letzte Ergebnis, <code>@</code> oder <code>&lt;</code> für <code>∠</code>, <code>Enter</code> für EXE, <code>Backspace</code> für DEL und <code>Esc</code> für AC.`,
-    keyboardText2: `Mit <code>↑</code>/<code>↓</code> frühere Rechnungen aufrufen und mit <code>←</code>/<code>→</code> den Ausdruck bearbeiten. Teile des Ausdrucks lassen sich mit der Maus oder <code>Umschalt</code> + Cursortaste markieren sowie mit <code>Strg+C</code>, <code>Strg+V</code> und <code>Strg+A</code> bearbeiten. Im Cursormodus löscht <code>Backspace</code> links und <code>Entf</code> rechts vom Cursor. Das letzte Ergebnis steht für Folgerechnungen als <code>Ans</code> bereit.`,
+    keyboardText2: `Mit <code>↑</code>/<code>↓</code> frühere Rechnungen aufrufen und mit <code>←</code>/<code>→</code> den Ausdruck bearbeiten. Teile des Ausdrucks lassen sich mit der Maus oder <code>Umschalt</code> + Cursortaste markieren sowie mit <code>Strg+C</code>, <code>Strg+V</code> und <code>Strg+A</code> bearbeiten. Im Cursormodus löscht <code>Backspace</code> links und <code>Entf</code> rechts vom Cursor. <code>A</code>, <code>B</code> und <code>C</code> fügen die gespeicherten Werte ein; <code>Ans</code> bezeichnet unabhängig von der Groß-/Kleinschreibung immer das letzte Ergebnis.`,
     historyTitle: `Verlauf`,
     manualTitle: `Hinweise aus der Anleitung`,
     manualMode: `Mit <code>Normal</code> und <code>Komplex</code> wird zwischen reellen und komplexen Berechnungen gewechselt.`,
@@ -75,6 +85,8 @@ const I18N = {
     rad: 'RAD',
     noHistory: 'No calculation yet.',
     cursor: 'Cursor mode',
+    stored: 'Result stored in {name}',
+    noResultToStore: 'No result to store',
     pageTitle: `Calculator`,
     backToOverview: `Back to exercise overview`,
     languageLabel: `Language:`,
@@ -100,7 +112,15 @@ const I18N = {
     piAria: `Number pi`,
     powerAria: `Raise x to the power y`,
     numberKeysAria: `Number and arithmetic keys`,
+    memoryKeysAria: `Keys for memories A, B, and C`,
+    storeAAria: `Store the current result in A`,
+    insertAAria: `Insert variable A`,
+    storeBAria: `Store the current result in B`,
+    insertBAria: `Insert variable B`,
+    storeCAria: `Store the current result in C`,
+    insertCAria: `Insert variable C`,
     expressionAria: `Calculation expression. Text can be selected, copied, and pasted.`,
+    resultAria: `Answer. The result can be selected and copied.`,
     helpTitle: `Complex mode for ET1`,
     helpText: `This partial emulator does not reproduce a complete scientific calculator. It provides practice with complex-number operations: entering the imaginary unit with <code>i</code>, polar form with <code>∠</code>, angle units, and result formats.`,
     sourceIntro: `Sources for the operating logic: the manufacturer's quick guide and support documentation for complex-number calculations. Links are provided below.`,
@@ -114,7 +134,7 @@ const I18N = {
     exampleEuler: `Euler form 3·e<sup>−j·90°</sup>`,
     keyboardTitle: `Keyboard controls`,
     keyboardText1: `Enter numbers and <code>+ - * / ^ ( )</code> directly. The keyboard accepts <code>i</code> and <code>j</code> for the imaginary unit; the display always uses <code>i</code>. Use <code>e</code> for Euler's number. <code>E</code> inserts <code>×10^(</code>; enter the closing parenthesis <code>)</code> after the exponent. Use <code>°</code> for a value in degrees, <code>Ans</code> or <code>ANS</code> for the previous result, <code>@</code> or <code>&lt;</code> for <code>∠</code>, <code>Enter</code> for EXE, <code>Backspace</code> for DEL, and <code>Esc</code> for AC.`,
-    keyboardText2: `Use <code>↑</code>/<code>↓</code> to recall previous calculations and <code>←</code>/<code>→</code> to edit an expression. Select parts of an expression with the mouse or <code>Shift</code> + an arrow key, and use <code>Ctrl+C</code>, <code>Ctrl+V</code>, and <code>Ctrl+A</code>. In cursor mode, <code>Backspace</code> deletes to the left and <code>Delete</code> deletes to the right of the cursor. The previous result is available as <code>Ans</code> for subsequent calculations.`,
+    keyboardText2: `Use <code>↑</code>/<code>↓</code> to recall previous calculations and <code>←</code>/<code>→</code> to edit an expression. Select parts of an expression with the mouse or <code>Shift</code> + an arrow key, and use <code>Ctrl+C</code>, <code>Ctrl+V</code>, and <code>Ctrl+A</code>. In cursor mode, <code>Backspace</code> deletes to the left and <code>Delete</code> deletes to the right of the cursor. <code>A</code>, <code>B</code>, and <code>C</code> insert the stored values; <code>Ans</code> always refers to the previous result, regardless of capitalization.`,
     historyTitle: `History`,
     manualTitle: `Manual notes`,
     manualMode: `Use <code>Normal</code> and <code>Complex</code> to switch between real and complex calculations.`,
@@ -136,6 +156,24 @@ const I18N = {
 let LANG = localStorage.getItem('lang') || 'de';
 if (!I18N[LANG]) LANG = 'de';
 
+function loadMemories() {
+  const memories = {
+    A: { re: 0, im: 0 },
+    B: { re: 0, im: 0 },
+    C: { re: 0, im: 0 },
+  };
+  try {
+    const stored = JSON.parse(localStorage.getItem('fx991_memories') || '{}');
+    for (const name of Object.keys(memories)) {
+      const value = stored[name];
+      if (value && Number.isFinite(value.re) && Number.isFinite(value.im)) {
+        memories[name] = { re: value.re, im: value.im };
+      }
+    }
+  } catch {}
+  return memories;
+}
+
 const state = {
   expr: '',
   justEvaluated: false,
@@ -145,6 +183,7 @@ const state = {
   oneShotResultFormat: null,
   lastResultFormat: null,
   ans: { re: 0, im: 0 },
+  memories: loadMemories(),
   lastResult: null,
   history: [],
   historyIndex: null,
@@ -279,11 +318,12 @@ function formatExprText(expr, cursorPosition = null) {
     .replaceAll('*', '×')
     .replaceAll('/', '÷')
     .replaceAll('pi', 'π')
-    .replaceAll('Ans', 'Ans')
+    .replace(/Ans/gi, 'Ans')
     .replaceAll('Abs', '|')
     .replaceAll('Conjg', 'Conjg')
     .replaceAll('Arg', 'Arg')
     .replace(/(^|[^A-Za-z])j(?=$|[^A-Za-z])/gi, '$1i')
+    .replace(/(^|[^A-Za-z])([abc])(?=$|[^A-Za-z])/gi, (_, prefix, name) => `${prefix}${name.toUpperCase()}`)
     .replace(new RegExp(`E([+\\-\\d${cursorMarker}]*)`, 'g'), '×10<sup>$1</sup>')
     .replace(cursorMarker, '<span class="input-cursor" aria-hidden="true"></span>');
 }
@@ -440,6 +480,11 @@ function tokenize(input) {
       i += 3;
       continue;
     }
+    if (/[ABC]/i.test(ch)) {
+      tokens.push({ type: 'variable', value: ch.toUpperCase() });
+      i += 1;
+      continue;
+    }
     if (ch === 'π') {
       tokens.push({ type: 'num', value: Math.PI });
       i += 1;
@@ -507,7 +552,7 @@ Parser.prototype.parseAdd = function parseAdd() {
 };
 
 Parser.prototype.startsPrimary = function startsPrimary(token) {
-  return token && ['num', 'imag', 'ans', 'func', '('].includes(token.type);
+  return token && ['num', 'imag', 'ans', 'variable', 'func', '('].includes(token.type);
 };
 
 Parser.prototype.parseMul = function parseMul() {
@@ -578,6 +623,10 @@ Parser.prototype.parsePrimary = function parsePrimary() {
     this.pos += 1;
     return state.ans;
   }
+  if (token.type === 'variable') {
+    this.pos += 1;
+    return state.memories[token.value];
+  }
   if (token.type === '(') {
     this.pos += 1;
     const value = this.parseAdd();
@@ -605,7 +654,8 @@ function evaluate(expr) {
       token.type === 'imag'
       || token.type === '∠'
       || (token.type === 'func' && ['Arg', 'Conjg', 'Re', 'Im'].includes(token.value))
-      || (token.type === 'ans' && Math.abs(state.ans.im) > 1e-12));
+      || (token.type === 'ans' && Math.abs(state.ans.im) > 1e-12)
+      || (token.type === 'variable' && Math.abs(state.memories[token.value].im) > 1e-12));
     if (hasComplexSyntax) throw new ModeError();
   }
   const result = new Parser(tokens).parse();
@@ -666,7 +716,7 @@ function render() {
   document.getElementById('input-display').innerHTML = editableExprHtml(state.expr);
   const resultDisplay = document.getElementById('result-display');
   const resultText = state.lastResult ? formatResult(state.lastResult) : '';
-  resultDisplay.innerHTML = state.lastResult ? resultTex(state.lastResult) : '';
+  resultDisplay.innerHTML = state.lastResult ? formatScientificHtml(resultText) : '';
   resultDisplay.classList.toggle('compact', resultText.length > 20 && resultText.length <= 28);
   resultDisplay.classList.toggle('very-compact', resultText.length > 28);
   document.getElementById('message-display').textContent = state.cursorMode
@@ -675,9 +725,6 @@ function render() {
   document.getElementById('cursor-mode-indicator').hidden = !state.cursorMode;
   updateModeButtons();
   renderHistory();
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([document.getElementById('result-display')]).catch(() => {});
-  }
 }
 
 function renderHistory() {
@@ -738,9 +785,11 @@ function insertScientificExponent() {
   }
   finishExpressionEdit();
   render();
+  requestAnimationFrame(focusInputDisplay);
 }
 
 function insertText(text) {
+  const startedFromAnswer = state.justEvaluated;
   if (text === 'j' || text === 'J') text = 'i';
   if (text === 'E') {
     insertScientificExponent();
@@ -770,6 +819,7 @@ function insertText(text) {
   state.lastResult = null;
   state.lastResultFormat = null;
   render();
+  if (startedFromAnswer) requestAnimationFrame(focusInputDisplay);
 }
 
 function clearAll() {
@@ -985,6 +1035,19 @@ function applyOutputFormatCommand(format) {
   render();
 }
 
+function storeMemory(name) {
+  if (!['A', 'B', 'C'].includes(name)) return;
+  if (!state.lastResult) {
+    document.getElementById('message-display').textContent = tr('noResultToStore');
+    requestAnimationFrame(focusInputDisplay);
+    return;
+  }
+  state.memories[name] = c(state.lastResult.re, state.lastResult.im);
+  localStorage.setItem('fx991_memories', JSON.stringify(state.memories));
+  document.getElementById('message-display').textContent = tr('stored').replace('{name}', name);
+  requestAnimationFrame(focusResultDisplay);
+}
+
 function runEval() {
   if (!state.expr.trim()) return;
   try {
@@ -1008,6 +1071,7 @@ function runEval() {
     if (state.history.length > 50) state.history.shift();
     document.getElementById('message-display').textContent = tr('ok');
     render();
+    requestAnimationFrame(focusResultDisplay);
   } catch (err) {
     state.lastResult = null;
     state.justEvaluated = false;
@@ -1026,6 +1090,7 @@ function handleAction(action, value) {
   if (action === 'toggle-sign') toggleSign();
   if (action === 'eval') runEval();
   if (action === 'to-format') applyOutputFormatCommand(value);
+  if (action === 'store') storeMemory(value);
   if (action === 'cursor') moveCursor(value);
 }
 
@@ -1046,7 +1111,32 @@ function applyLanguage() {
 }
 
 const inputDisplay = document.getElementById('input-display');
+const answerDisplay = document.getElementById('result-display');
 let pointerSelecting = false;
+
+function focusInputDisplay() {
+  inputDisplay.focus({ preventScroll: true });
+}
+
+function focusResultDisplay() {
+  if (!state.lastResult) {
+    focusInputDisplay();
+    return;
+  }
+  answerDisplay.focus({ preventScroll: true });
+}
+
+window.addEventListener('message', (event) => {
+  if (event.source !== window.parent
+      || !event.data
+      || event.data.type !== 'et-calculator-focus') return;
+  if (state.justEvaluated && state.lastResult) focusResultDisplay();
+  else focusInputDisplay();
+});
+
+answerDisplay.addEventListener('pointerdown', () => {
+  answerDisplay.focus({ preventScroll: true });
+});
 
 function pointerBoundary(event) {
   const element = document.elementFromPoint(event.clientX, event.clientY);
@@ -1185,15 +1275,24 @@ document.getElementById('lang').addEventListener('change', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
-  if ((event.ctrlKey || event.metaKey)
-      && event.key.toLowerCase() === 'a'
-      && document.activeElement === inputDisplay) {
-    event.preventDefault();
-    state.cursorMode = true;
-    state.selectionAnchor = 0;
-    state.cursorPosition = state.expr.length;
-    render();
-    return;
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') {
+    if (document.activeElement === inputDisplay) {
+      event.preventDefault();
+      state.cursorMode = true;
+      state.selectionAnchor = 0;
+      state.cursorPosition = state.expr.length;
+      render();
+      return;
+    }
+    if (document.activeElement === answerDisplay && answerDisplay.textContent) {
+      event.preventDefault();
+      const range = document.createRange();
+      range.selectNodeContents(answerDisplay);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      return;
+    }
   }
   if (event.ctrlKey || event.metaKey || event.altKey) return;
   const key = event.key;
@@ -1232,9 +1331,14 @@ document.addEventListener('keydown', (event) => {
     insertText('E');
     return;
   }
-  if (/^[ans]$/i.test(key)) {
+  if (/^[abc]$/i.test(key)) {
     event.preventDefault();
-    insertText(key);
+    insertText(key.toUpperCase());
+    return;
+  }
+  if (/^[ns]$/i.test(key)) {
+    event.preventDefault();
+    insertText(key.toLowerCase());
     return;
   }
   if (key === 'p') {

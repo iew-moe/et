@@ -173,6 +173,22 @@
       line-height: 1.2;
       overflow-wrap: anywhere;
       text-align: right;
+      cursor: text;
+      user-select: text;
+    }
+
+    .result-line:focus-visible {
+      outline: 2px solid #315db6;
+      outline-offset: 2px;
+    }
+
+    .result-line:focus:not(:empty)::after {
+      content: "";
+      display: inline-block;
+      height: 1.15em;
+      margin-left: 2px;
+      border-left: 2px solid #253a2b;
+      vertical-align: -0.18em;
     }
 
     .result-line.compact { font-size: 1.12rem; }
@@ -207,6 +223,7 @@
     }
 
     .function-grid,
+    .memory-grid,
     .number-grid {
       display: grid;
       gap: 5px 7px;
@@ -215,6 +232,15 @@
     .function-grid {
       grid-template-columns: repeat(6, minmax(0, 1fr));
       margin: 7px 0 10px;
+    }
+
+    .memory-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      margin: 0 0 10px;
+    }
+
+    .memory-grid .function-key {
+      font-size: 0.92rem;
     }
 
     .number-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -373,6 +399,7 @@
     @media (max-width: 420px) {
       .calculator { padding-inline: 12px; }
       .function-grid,
+      .memory-grid,
       .number-grid { column-gap: 5px; }
       .function-grid .format-key { font-size: 0.72rem; }
       .function-grid .compact-label { font-size: 0.82rem; }
@@ -411,7 +438,7 @@
             <span id="cursor-mode-indicator" hidden>CURSOR</span>
           </div>
           <div id="input-display" class="math-line" role="textbox" tabindex="0" aria-label="Rechenausdruck" data-i18n-aria="expressionAria"></div>
-          <div id="result-display" class="result-line"></div>
+          <div id="result-display" class="result-line" role="textbox" tabindex="0" aria-readonly="true" aria-label="Antwort" data-i18n-aria="resultAria"></div>
           <div id="message-display" class="message-line"></div>
         </div>
       </div>
@@ -457,6 +484,15 @@
           <button class="key function-key math-key" data-action="insert" data-value="^2">x²</button>
           <button class="key function-key math-key" data-action="insert" data-value="^-1">x⁻¹</button>
           <button class="key function-key math-key" data-action="insert" data-value="^" aria-label="Potenz x hoch y" data-i18n-aria="powerAria">x<sup>y</sup></button>
+        </div>
+
+        <div class="memory-grid" aria-label="Speichertasten" data-i18n-aria="memoryKeysAria">
+          <button class="key function-key" data-action="store" data-value="A" aria-label="Ergebnis in A speichern" data-i18n-aria="storeAAria">→A</button>
+          <button class="key function-key" data-action="insert" data-value="A" aria-label="Variable A einfügen" data-i18n-aria="insertAAria">A</button>
+          <button class="key function-key" data-action="store" data-value="B" aria-label="Ergebnis in B speichern" data-i18n-aria="storeBAria">→B</button>
+          <button class="key function-key" data-action="insert" data-value="B" aria-label="Variable B einfügen" data-i18n-aria="insertBAria">B</button>
+          <button class="key function-key" data-action="store" data-value="C" aria-label="Ergebnis in C speichern" data-i18n-aria="storeCAria">→C</button>
+          <button class="key function-key" data-action="insert" data-value="C" aria-label="Variable C einfügen" data-i18n-aria="insertCAria">C</button>
         </div>
 
         <div class="number-grid" aria-label="Zahlen- und Rechentasten" data-i18n-aria="numberKeysAria">

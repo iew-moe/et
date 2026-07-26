@@ -52,6 +52,12 @@
     let customPosition = null;
     let dragState = null;
 
+    function focusCalculatorInput() {
+      if (!frame.contentWindow) return;
+      frame.focus({ preventScroll: true });
+      frame.contentWindow.postMessage({ type: "et-calculator-focus" }, "*");
+    }
+
     function syncLauncherPositions() {
       const isMobile = window.matchMedia("(max-width: 620px)").matches;
       const baseBottom = isMobile ? 10 : 18;
@@ -140,7 +146,7 @@
       panel.hidden = false;
       toggle.setAttribute("aria-expanded", "true");
       syncLauncherPositions();
-      close.focus();
+      requestAnimationFrame(focusCalculatorInput);
     }
 
     toggle.addEventListener("click", () => {
@@ -199,6 +205,7 @@
       calculatorHeight = height;
       fitPanelToCalculator();
     });
+    frame.addEventListener("load", focusCalculatorInput);
     window.addEventListener("resize", () => {
       fitPanelToCalculator();
       syncLauncherPositions();
