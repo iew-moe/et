@@ -25,6 +25,7 @@ const I18N = {
     tableColCartesian: 'Kartesisch',
     tableColPolar: 'Polar',
     tableColUnit: 'Einheit',
+    calculationNote: 'Rechnen Sie in den Zwischenschritten m\u00f6glichst mit ungerundeten Werten, mindestens jedoch mit sechs signifikanten Stellen.',
     error: 'Fehler',
   },
   en: {
@@ -52,6 +53,7 @@ const I18N = {
     tableColCartesian: 'Cartesian',
     tableColPolar: 'Polar',
     tableColUnit: 'Unit',
+    calculationNote: 'Use unrounded values for intermediate calculations whenever possible, or at least six significant digits.',
     error: 'Error',
   }
 };
@@ -124,6 +126,8 @@ function applyLanguageUI() {
   if (check) check.textContent = tr('check');
   const showSolution = document.getElementById('show-solution');
   if (showSolution) showSolution.textContent = tr('showSolution');
+  const calculationNote = document.getElementById('calculation-note');
+  if (calculationNote) calculationNote.textContent = tr('calculationNote');
   setLoadingTitle(true);
 }
 

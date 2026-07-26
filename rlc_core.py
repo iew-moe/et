@@ -639,8 +639,14 @@ def check(inputs):
         I1_true, I2_true = I_single, I_series
 
     def ok(val, ref):
-        tol = 0.01 * max(1.0, abs(ref))
-        return abs(val - ref) <= tol
+        if abs(ref) <= 1e-9:
+            return abs(val - ref) <= 1e-9
+        return round_sig(val, 3) == round_sig(ref, 3)
+
+    def ok_phase(val, ref):
+        # Compare the equivalent angle nearest to the reference, e.g. -180 = 180 degrees.
+        delta = (val - ref + 180.0) % 360.0 - 180.0
+        return ok(ref + delta, ref)
 
     out = {}
     for k, ref in {
@@ -676,7 +682,8 @@ def check(inputs):
         's_mag': abs(S), 's_phase': ang(S),
     }.items():
         try:
-            out[k] = ok(float(inputs.get(k, 'nan')), ref)
+            checker = ok_phase if k.endswith('_phase') else ok
+            out[k] = checker(float(inputs.get(k, 'nan')), ref)
         except Exception:
             out[k] = False
 
