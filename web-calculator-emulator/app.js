@@ -1130,9 +1130,12 @@ window.addEventListener('message', (event) => {
   if (event.source !== window.parent
       || !event.data
       || event.data.type !== 'et-calculator-focus') return;
-  if (state.justEvaluated && state.lastResult) focusResultDisplay();
-  else focusInputDisplay();
+  focusInputDisplay();
 });
+
+if (window.parent !== window) {
+  window.parent.postMessage({ type: 'et-calculator-ready' }, '*');
+}
 
 answerDisplay.addEventListener('pointerdown', () => {
   answerDisplay.focus({ preventScroll: true });

@@ -53,7 +53,7 @@
     let dragState = null;
 
     function focusCalculatorInput() {
-      if (!frame.contentWindow) return;
+      if (panel.hidden || !frame.contentWindow) return;
       frame.focus({ preventScroll: true });
       frame.contentWindow.postMessage({ type: "et-calculator-focus" }, "*");
     }
@@ -146,7 +146,9 @@
       panel.hidden = false;
       toggle.setAttribute("aria-expanded", "true");
       syncLauncherPositions();
+      focusCalculatorInput();
       requestAnimationFrame(focusCalculatorInput);
+      setTimeout(focusCalculatorInput, 100);
     }
 
     toggle.addEventListener("click", () => {
@@ -197,9 +199,12 @@
       }
     });
     window.addEventListener("message", (event) => {
-      if (event.source !== frame.contentWindow
-          || !event.data
-          || event.data.type !== "et-calculator-height") return;
+      if (event.source !== frame.contentWindow || !event.data) return;
+      if (event.data.type === "et-calculator-ready") {
+        if (!panel.hidden) focusCalculatorInput();
+        return;
+      }
+      if (event.data.type !== "et-calculator-height") return;
       const height = Number(event.data.height);
       if (!Number.isFinite(height) || height < 100 || height > 2000) return;
       calculatorHeight = height;
