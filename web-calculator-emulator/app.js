@@ -34,6 +34,7 @@ const I18N = {
     piAria: `Kreiszahl Pi`,
     powerAria: `Potenz x hoch y`,
     numberKeysAria: `Zahlen- und Rechentasten`,
+    expressionAria: `Rechenausdruck. Text kann markiert, kopiert und eingefügt werden.`,
     helpTitle: `Komplex-Modus für ET1`,
     helpText: `Dieser Teil-Emulator bildet keinen vollständigen wissenschaftlichen Rechner nach. Er trainiert die Bedienlogik für komplexe Zahlen: Eingabe der imaginären Einheit mit <code>i</code>, Polarform mit <code>∠</code>, Winkelmaß und Ergebnisformat.`,
     sourceIntro: `Quellen zur Bedienlogik: Hersteller-Kurzanleitung und Supportdokumentation zur Komplex-Anwendung. Links stehen unten.`,
@@ -46,8 +47,8 @@ const I18N = {
     exampleDivision: `Division komplexer Zahlen`,
     exampleEuler: `Eulerform 3·e<sup>−j·90°</sup>`,
     keyboardTitle: `Bedienung mit Tastatur`,
-    keyboardText1: `Zahlen und <code>+ - * / ^ ( )</code> direkt eingeben. Die Tastatur akzeptiert <code>i</code> und <code>j</code> für die imaginäre Einheit; angezeigt wird einheitlich <code>i</code>. <code>e</code> steht für die Eulersche Zahl, <code>E</code> für <code>×10<sup>x</sup></code> und <code>°</code> für einen Gradwert, <code>Ans</code> oder <code>ANS</code> für das letzte Ergebnis, <code>@</code> oder <code>&lt;</code> für <code>∠</code>, <code>Enter</code> für EXE, <code>Backspace</code> für DEL und <code>Esc</code> für AC.`,
-    keyboardText2: `Mit <code>↑</code>/<code>↓</code> frühere Rechnungen aufrufen und mit <code>←</code>/<code>→</code> den Ausdruck bearbeiten. Das letzte Ergebnis steht für Folgerechnungen als <code>Ans</code> bereit.`,
+    keyboardText1: `Zahlen und <code>+ - * / ^ ( )</code> direkt eingeben. Die Tastatur akzeptiert <code>i</code> und <code>j</code> für die imaginäre Einheit; angezeigt wird einheitlich <code>i</code>. <code>e</code> steht für die Eulersche Zahl. <code>E</code> fügt <code>×10^(</code> ein; nach dem Exponenten muss die schließende Klammer <code>)</code> eingegeben werden. <code>°</code> steht für einen Gradwert, <code>Ans</code> oder <code>ANS</code> für das letzte Ergebnis, <code>@</code> oder <code>&lt;</code> für <code>∠</code>, <code>Enter</code> für EXE, <code>Backspace</code> für DEL und <code>Esc</code> für AC.`,
+    keyboardText2: `Mit <code>↑</code>/<code>↓</code> frühere Rechnungen aufrufen und mit <code>←</code>/<code>→</code> den Ausdruck bearbeiten. Teile des Ausdrucks lassen sich mit der Maus oder <code>Umschalt</code> + Cursortaste markieren sowie mit <code>Strg+C</code>, <code>Strg+V</code> und <code>Strg+A</code> bearbeiten. Im Cursormodus löscht <code>Backspace</code> links und <code>Entf</code> rechts vom Cursor. Das letzte Ergebnis steht für Folgerechnungen als <code>Ans</code> bereit.`,
     historyTitle: `Verlauf`,
     manualTitle: `Hinweise aus der Anleitung`,
     manualMode: `Mit <code>Normal</code> und <code>Komplex</code> wird zwischen reellen und komplexen Berechnungen gewechselt.`,
@@ -99,6 +100,7 @@ const I18N = {
     piAria: `Number pi`,
     powerAria: `Raise x to the power y`,
     numberKeysAria: `Number and arithmetic keys`,
+    expressionAria: `Calculation expression. Text can be selected, copied, and pasted.`,
     helpTitle: `Complex mode for ET1`,
     helpText: `This partial emulator does not reproduce a complete scientific calculator. It provides practice with complex-number operations: entering the imaginary unit with <code>i</code>, polar form with <code>∠</code>, angle units, and result formats.`,
     sourceIntro: `Sources for the operating logic: the manufacturer's quick guide and support documentation for complex-number calculations. Links are provided below.`,
@@ -111,8 +113,8 @@ const I18N = {
     exampleDivision: `Divide complex numbers`,
     exampleEuler: `Euler form 3·e<sup>−j·90°</sup>`,
     keyboardTitle: `Keyboard controls`,
-    keyboardText1: `Enter numbers and <code>+ - * / ^ ( )</code> directly. The keyboard accepts <code>i</code> and <code>j</code> for the imaginary unit; the display always uses <code>i</code>. Use <code>e</code> for Euler's number, <code>E</code> for <code>×10<sup>x</sup></code>, <code>°</code> for a value in degrees, <code>Ans</code> or <code>ANS</code> for the previous result, <code>@</code> or <code>&lt;</code> for <code>∠</code>, <code>Enter</code> for EXE, <code>Backspace</code> for DEL, and <code>Esc</code> for AC.`,
-    keyboardText2: `Use <code>↑</code>/<code>↓</code> to recall previous calculations and <code>←</code>/<code>→</code> to edit an expression. The previous result is available as <code>Ans</code> for subsequent calculations.`,
+    keyboardText1: `Enter numbers and <code>+ - * / ^ ( )</code> directly. The keyboard accepts <code>i</code> and <code>j</code> for the imaginary unit; the display always uses <code>i</code>. Use <code>e</code> for Euler's number. <code>E</code> inserts <code>×10^(</code>; enter the closing parenthesis <code>)</code> after the exponent. Use <code>°</code> for a value in degrees, <code>Ans</code> or <code>ANS</code> for the previous result, <code>@</code> or <code>&lt;</code> for <code>∠</code>, <code>Enter</code> for EXE, <code>Backspace</code> for DEL, and <code>Esc</code> for AC.`,
+    keyboardText2: `Use <code>↑</code>/<code>↓</code> to recall previous calculations and <code>←</code>/<code>→</code> to edit an expression. Select parts of an expression with the mouse or <code>Shift</code> + an arrow key, and use <code>Ctrl+C</code>, <code>Ctrl+V</code>, and <code>Ctrl+A</code>. In cursor mode, <code>Backspace</code> deletes to the left and <code>Delete</code> deletes to the right of the cursor. The previous result is available as <code>Ans</code> for subsequent calculations.`,
     historyTitle: `History`,
     manualTitle: `Manual notes`,
     manualMode: `Use <code>Normal</code> and <code>Complex</code> to switch between real and complex calculations.`,
@@ -148,6 +150,7 @@ const state = {
   historyIndex: null,
   cursorMode: false,
   cursorPosition: 0,
+  selectionAnchor: null,
 };
 
 function tr(key) {
@@ -228,6 +231,14 @@ function fmtNumber(x, significantDigits = DISPLAY_SIGNIFICANT_DIGITS) {
     .replace('e', 'E');
 }
 
+function numberTex(x) {
+  const formatted = fmtNumber(x);
+  const scientific = formatted.match(/^(.+)E([+-]?\d+)$/);
+  return scientific
+    ? `${scientific[1]}\\times 10^{${scientific[2]}}`
+    : formatted;
+}
+
 function formatRect(z) {
   const re = cleanSmall(z.re);
   const im = cleanSmall(z.im);
@@ -254,8 +265,17 @@ function escapeHtml(text) {
   }[ch]));
 }
 
-function formatExprText(expr) {
-  return escapeHtml(expr)
+function formatScientificHtml(text) {
+  return escapeHtml(text).replace(/E([+-]?\d+)/g, '×10<sup>$1</sup>');
+}
+
+function formatExprText(expr, cursorPosition = null) {
+  const cursorMarker = '\uE000';
+  const source = Number.isInteger(cursorPosition)
+    ? `${expr.slice(0, cursorPosition)}${cursorMarker}${expr.slice(cursorPosition)}`
+    : expr;
+
+  return escapeHtml(source)
     .replaceAll('*', '×')
     .replaceAll('/', '÷')
     .replaceAll('pi', 'π')
@@ -263,7 +283,9 @@ function formatExprText(expr) {
     .replaceAll('Abs', '|')
     .replaceAll('Conjg', 'Conjg')
     .replaceAll('Arg', 'Arg')
-    .replace(/(^|[^A-Za-z])j(?=$|[^A-Za-z])/gi, '$1i');
+    .replace(/(^|[^A-Za-z])j(?=$|[^A-Za-z])/gi, '$1i')
+    .replace(new RegExp(`E([+\\-\\d${cursorMarker}]*)`, 'g'), '×10<sup>$1</sup>')
+    .replace(cursorMarker, '<span class="input-cursor" aria-hidden="true"></span>');
 }
 
 function exprHtml(expr) {
@@ -271,16 +293,65 @@ function exprHtml(expr) {
   return formatExprText(expr);
 }
 
-function editableExprHtml(expr) {
-  let html;
-  if (!state.cursorMode) {
-    html = exprHtml(expr);
-  } else {
-    const position = Math.max(0, Math.min(state.cursorPosition, expr.length));
-    const before = formatExprText(expr.slice(0, position));
-    const after = formatExprText(expr.slice(position));
-    html = `${before}<span class="input-cursor" aria-hidden="true"></span>${after}`;
+const ATOMIC_INPUT_PARTS = [
+  '*10^(', '10^(', 'Conjg(', 'Abs(', 'Arg(', 'Ans', 'Re(', 'Im(', '^-1', '^2', 'pi',
+];
+
+function expressionUnits(expr) {
+  const units = [];
+  let position = 0;
+  while (position < expr.length) {
+    const atom = ATOMIC_INPUT_PARTS.find((part) => expr.startsWith(part, position));
+    const text = atom || expr[position];
+    units.push({ start: position, end: position + text.length, text });
+    position += text.length;
   }
+  return units;
+}
+
+function selectionRange() {
+  if (!Number.isInteger(state.selectionAnchor)
+      || state.selectionAnchor === state.cursorPosition) return null;
+  return {
+    start: Math.min(state.selectionAnchor, state.cursorPosition),
+    end: Math.max(state.selectionAnchor, state.cursorPosition),
+  };
+}
+
+function clearSelection() {
+  state.selectionAnchor = null;
+}
+
+function cursorBoundaries(expr = state.expr) {
+  return [0, ...expressionUnits(expr).map((unit) => unit.end)];
+}
+
+function editableExpressionHtml(expr) {
+  if (!expr) {
+    return state.cursorMode
+      ? '<span class="input-cursor" aria-hidden="true"></span>'
+      : `<span class="muted">${tr('empty')}</span>`;
+  }
+
+  const range = selectionRange();
+  const showCursor = state.cursorMode && !range;
+  const units = expressionUnits(expr);
+  let html = '';
+  units.forEach((unit) => {
+    if (showCursor && state.cursorPosition === unit.start) {
+      html += '<span class="input-cursor" aria-hidden="true"></span>';
+    }
+    const selected = range && unit.start < range.end && unit.end > range.start;
+    html += `<span class="input-token${selected ? ' selected' : ''}" data-start="${unit.start}" data-end="${unit.end}">${formatExprText(unit.text)}</span>`;
+  });
+  if (showCursor && state.cursorPosition === expr.length) {
+    html += '<span class="input-cursor" aria-hidden="true"></span>';
+  }
+  return html;
+}
+
+function editableExprHtml(expr) {
+  let html = editableExpressionHtml(expr);
 
   if (state.oneShotResultFormat) {
     const command = state.oneShotResultFormat === 'polar' ? '→r∠θ' : '→a+bi';
@@ -291,18 +362,18 @@ function editableExprHtml(expr) {
 
 function resultTex(z, format = state.lastResultFormat || state.resultFormat) {
   if (!z) return '';
-  if (state.calculatorMode === 'normal') return `\\(${fmtNumber(z.re)}\\)`;
+  if (state.calculatorMode === 'normal') return `\\(${numberTex(z.re)}\\)`;
   if (format === 'polar') {
-    const r = fmtNumber(absC(z));
-    const theta = fmtNumber(angleFromRad(argC(z)));
+    const r = numberTex(absC(z));
+    const theta = numberTex(angleFromRad(argC(z)));
     return `\\(${r}\\angle ${theta}${state.angleMode === 'deg' ? '^{\\circ}' : ''}\\)`;
   }
   const re = cleanSmall(z.re);
   const im = cleanSmall(z.im);
-  if (im === 0) return `\\(${fmtNumber(re)}\\)`;
-  if (re === 0) return `\\(${fmtNumber(im)}i\\)`;
+  if (im === 0) return `\\(${numberTex(re)}\\)`;
+  if (re === 0) return `\\(${numberTex(im)}i\\)`;
   const sign = im >= 0 ? '+' : '-';
-  return `\\(${fmtNumber(re)} ${sign} ${fmtNumber(Math.abs(im))}i\\)`;
+  return `\\(${numberTex(re)} ${sign} ${numberTex(Math.abs(im))}i\\)`;
 }
 
 function tokenize(input) {
@@ -619,13 +690,62 @@ function renderHistory() {
   el.innerHTML = state.history.slice(-8).reverse().map((item) => `
     <div class="history-item">
       <div>${exprHtml(item.expr)}</div>
-      <strong>= ${escapeHtml(item.result)}</strong>
+      <strong>= ${formatScientificHtml(item.result)}</strong>
     </div>
   `).join('');
 }
 
+function finishExpressionEdit() {
+  state.justEvaluated = false;
+  state.cursorMode = true;
+  state.historyIndex = null;
+  state.oneShotResultFormat = null;
+  state.lastResult = null;
+  state.lastResultFormat = null;
+}
+
+function replaceSelectionWith(text, cursorOffset = text.length) {
+  const range = selectionRange();
+  const position = range
+    ? range.start
+    : (state.cursorMode ? state.cursorPosition : state.expr.length);
+  const end = range ? range.end : position;
+  state.expr = `${state.expr.slice(0, position)}${text}${state.expr.slice(end)}`;
+  state.cursorPosition = position + cursorOffset;
+  clearSelection();
+  finishExpressionEdit();
+}
+
+function insertScientificExponent() {
+  const template = '*10^(';
+  if (state.justEvaluated) {
+    state.expr = `Ans${template}`;
+    state.cursorPosition = state.expr.length;
+    clearSelection();
+  } else {
+    const range = selectionRange();
+    const position = range
+      ? range.start
+      : (state.cursorMode ? state.cursorPosition : state.expr.length);
+    const end = range ? range.end : position;
+    const previousCharacter = state.expr[position - 1] || '';
+    const insertion = !previousCharacter || '+-*/^('.includes(previousCharacter)
+      ? '10^()'
+      : template;
+    state.expr = `${state.expr.slice(0, position)}${insertion}${state.expr.slice(end)}`;
+    state.cursorPosition = position + insertion.length;
+    clearSelection();
+  }
+  finishExpressionEdit();
+  render();
+}
+
 function insertText(text) {
   if (text === 'j' || text === 'J') text = 'i';
+  if (text === 'E') {
+    insertScientificExponent();
+    return;
+  }
   if (state.justEvaluated) {
     const continuesWithAns = ['+', '-', '*', '/', '^', '^2', '^-1'].includes(text);
     state.expr = continuesWithAns ? `Ans${text}` : text;
@@ -634,11 +754,16 @@ function insertText(text) {
     state.historyIndex = null;
     state.cursorPosition = state.expr.length;
     state.oneShotResultFormat = null;
+    clearSelection();
+  } else if (selectionRange()) {
+    replaceSelectionWith(text);
   } else if (state.cursorMode) {
+    clearSelection();
     state.expr = `${state.expr.slice(0, state.cursorPosition)}${text}${state.expr.slice(state.cursorPosition)}`;
     state.cursorPosition += text.length;
     state.historyIndex = null;
   } else {
+    clearSelection();
     state.expr += text;
     state.cursorPosition = state.expr.length;
   }
@@ -655,6 +780,7 @@ function clearAll() {
   state.justEvaluated = false;
   state.cursorMode = false;
   state.cursorPosition = 0;
+  clearSelection();
   state.historyIndex = null;
   render();
 }
@@ -666,22 +792,44 @@ function backspace() {
     render();
     return;
   }
+  const range = selectionRange();
+  if (range) {
+    state.expr = `${state.expr.slice(0, range.start)}${state.expr.slice(range.end)}`;
+    state.cursorPosition = range.start;
+    clearSelection();
+    finishExpressionEdit();
+    render();
+    return;
+  }
   const position = state.cursorMode ? state.cursorPosition : state.expr.length;
   if (position === 0) return;
-  const beforeCursor = state.expr.slice(0, position);
-  const names = ['Conjg(', 'Abs(', 'Arg(', 'Re(', 'Im(', '^-1', '^2'];
-  let deleteLength = beforeCursor.slice(-3).toLowerCase() === 'ans' ? 3 : 1;
-  for (const name of names) {
-    if (beforeCursor.endsWith(name)) {
-      deleteLength = name.length;
-      break;
-    }
+  const previousUnit = [...expressionUnits(state.expr)]
+    .reverse()
+    .find((unit) => unit.end <= position);
+  if (!previousUnit) return;
+  state.expr = `${state.expr.slice(0, previousUnit.start)}${state.expr.slice(position)}`;
+  state.cursorPosition = previousUnit.start;
+  finishExpressionEdit();
+  render();
+}
+
+function deleteForward() {
+  if (!state.cursorMode) return;
+  const range = selectionRange();
+  if (range) {
+    state.expr = `${state.expr.slice(0, range.start)}${state.expr.slice(range.end)}`;
+    state.cursorPosition = range.start;
+    clearSelection();
+    finishExpressionEdit();
+    render();
+    return;
   }
-  state.expr = `${state.expr.slice(0, position - deleteLength)}${state.expr.slice(position)}`;
-  state.cursorPosition = position - deleteLength;
-  state.lastResult = null;
-  state.lastResultFormat = null;
-  state.historyIndex = null;
+  if (state.cursorPosition >= state.expr.length) return;
+  const nextUnit = expressionUnits(state.expr)
+    .find((unit) => unit.start >= state.cursorPosition);
+  if (!nextUnit) return;
+  state.expr = `${state.expr.slice(0, state.cursorPosition)}${state.expr.slice(nextUnit.end)}`;
+  finishExpressionEdit();
   render();
 }
 
@@ -694,6 +842,7 @@ function toggleSign() {
     state.cursorMode = false;
     state.cursorPosition = state.expr.length;
     state.historyIndex = null;
+    clearSelection();
     render();
     return;
   }
@@ -704,6 +853,7 @@ function toggleSign() {
   state.expr = `-(${state.expr})`;
   state.cursorPosition = state.expr.length;
   state.historyIndex = null;
+  clearSelection();
   state.lastResult = null;
   state.lastResultFormat = null;
   render();
@@ -720,11 +870,13 @@ function loadHistoryEntry(index) {
   state.cursorMode = true;
   state.cursorPosition = state.expr.length;
   state.historyIndex = index;
+  clearSelection();
   render();
 }
 
-function moveCursor(direction) {
+function moveCursor(direction, extendSelection = false) {
   if (direction === 'up' || direction === 'down') {
+    clearSelection();
     if (!state.history.length) {
       if (state.expr) {
         state.cursorMode = true;
@@ -760,10 +912,27 @@ function moveCursor(direction) {
     state.justEvaluated = false;
   }
 
+  const range = selectionRange();
+  if (range && !extendSelection) {
+    state.cursorPosition = direction === 'left' ? range.start : range.end;
+    clearSelection();
+    render();
+    return;
+  }
+
+  if (extendSelection && !Number.isInteger(state.selectionAnchor)) {
+    state.selectionAnchor = state.cursorPosition;
+  } else if (!extendSelection) {
+    clearSelection();
+  }
+
+  const boundaries = cursorBoundaries();
   if (direction === 'left') {
-    state.cursorPosition = Math.max(0, state.cursorPosition - 1);
+    const previous = [...boundaries].reverse().find((position) => position < state.cursorPosition);
+    state.cursorPosition = previous === undefined ? 0 : previous;
   } else if (direction === 'right') {
-    state.cursorPosition = Math.min(state.expr.length, state.cursorPosition + 1);
+    const next = boundaries.find((position) => position > state.cursorPosition);
+    state.cursorPosition = next === undefined ? state.expr.length : next;
   }
   render();
 }
@@ -784,6 +953,7 @@ function setCalculatorMode(mode) {
   state.historyIndex = null;
   state.cursorMode = false;
   state.cursorPosition = state.expr.length;
+  clearSelection();
   localStorage.setItem('fx991_calculator_mode', mode);
   render();
 }
@@ -828,6 +998,7 @@ function runEval() {
     state.cursorMode = false;
     state.cursorPosition = state.expr.length;
     state.historyIndex = null;
+    clearSelection();
     state.history.push({
       expr: state.expr,
       value: c(result.re, result.im),
@@ -874,6 +1045,97 @@ function applyLanguage() {
   render();
 }
 
+const inputDisplay = document.getElementById('input-display');
+let pointerSelecting = false;
+
+function pointerBoundary(event) {
+  const element = document.elementFromPoint(event.clientX, event.clientY);
+  const directToken = element && element.closest
+    ? element.closest('.input-token')
+    : null;
+  const tokens = [...inputDisplay.querySelectorAll('.input-token')];
+  const token = directToken || tokens.reduce((closest, candidate) => {
+    const rect = candidate.getBoundingClientRect();
+    const dx = event.clientX < rect.left
+      ? rect.left - event.clientX
+      : Math.max(0, event.clientX - rect.right);
+    const dy = event.clientY < rect.top
+      ? rect.top - event.clientY
+      : Math.max(0, event.clientY - rect.bottom);
+    const distance = dx * dx + dy * dy;
+    return !closest || distance < closest.distance ? { candidate, distance } : closest;
+  }, null)?.candidate;
+
+  if (!token) return 0;
+  const rect = token.getBoundingClientRect();
+  return event.clientX < rect.left + rect.width / 2
+    ? Number(token.dataset.start)
+    : Number(token.dataset.end);
+}
+
+inputDisplay.addEventListener('pointerdown', (event) => {
+  if (event.button !== 0) return;
+  const position = pointerBoundary(event);
+  state.cursorMode = true;
+  state.justEvaluated = false;
+  state.selectionAnchor = position;
+  state.cursorPosition = position;
+  pointerSelecting = true;
+  inputDisplay.setPointerCapture(event.pointerId);
+  inputDisplay.focus({ preventScroll: true });
+  render();
+  event.preventDefault();
+});
+
+inputDisplay.addEventListener('pointermove', (event) => {
+  if (!pointerSelecting || !inputDisplay.hasPointerCapture(event.pointerId)) return;
+  state.cursorPosition = pointerBoundary(event);
+  render();
+});
+
+function finishPointerSelection(event) {
+  if (!pointerSelecting) return;
+  pointerSelecting = false;
+  if (inputDisplay.hasPointerCapture(event.pointerId)) {
+    inputDisplay.releasePointerCapture(event.pointerId);
+  }
+  if (state.selectionAnchor === state.cursorPosition) clearSelection();
+  render();
+}
+
+inputDisplay.addEventListener('pointerup', finishPointerSelection);
+inputDisplay.addEventListener('pointercancel', finishPointerSelection);
+
+function normalizePastedExpression(text) {
+  return String(text)
+    .trim()
+    .replace(/\s+/g, '')
+    .replaceAll(',', '.')
+    .replace(/[×·]/g, '*')
+    .replaceAll('÷', '/')
+    .replaceAll('−', '-')
+    .replace(/[jJ]/g, 'i')
+    .replace(/ans/gi, 'Ans')
+    .replace(/E([+-]?\d+)/g, '*10^($1');
+}
+
+document.addEventListener('copy', (event) => {
+  if (document.activeElement !== inputDisplay) return;
+  const range = selectionRange();
+  if (!range || !event.clipboardData) return;
+  event.clipboardData.setData('text/plain', state.expr.slice(range.start, range.end));
+  event.preventDefault();
+});
+
+document.addEventListener('paste', (event) => {
+  if (document.activeElement !== inputDisplay || !event.clipboardData) return;
+  const pasted = normalizePastedExpression(event.clipboardData.getData('text/plain'));
+  if (!pasted) return;
+  replaceSelectionWith(pasted);
+  render();
+  event.preventDefault();
+});
+
 document.getElementById('keys').addEventListener('click', (event) => {
   const btn = event.target.closest('button');
   if (!btn) return;
@@ -911,6 +1173,7 @@ document.querySelectorAll('[data-example]').forEach((btn) => {
     state.cursorMode = false;
     state.cursorPosition = state.expr.length;
     state.historyIndex = null;
+    clearSelection();
     render();
   });
 });
@@ -922,11 +1185,21 @@ document.getElementById('lang').addEventListener('change', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
+  if ((event.ctrlKey || event.metaKey)
+      && event.key.toLowerCase() === 'a'
+      && document.activeElement === inputDisplay) {
+    event.preventDefault();
+    state.cursorMode = true;
+    state.selectionAnchor = 0;
+    state.cursorPosition = state.expr.length;
+    render();
+    return;
+  }
   if (event.ctrlKey || event.metaKey || event.altKey) return;
   const key = event.key;
   if (key.startsWith('Arrow')) {
     event.preventDefault();
-    moveCursor(key.slice(5).toLowerCase());
+    moveCursor(key.slice(5).toLowerCase(), event.shiftKey);
     return;
   }
   if (/^[0-9]$/.test(key) || ['+', '-', '*', '/', '^', '(', ')', '.', '°'].includes(key)) {
@@ -982,6 +1255,11 @@ document.addEventListener('keydown', (event) => {
   if (key === 'Backspace') {
     event.preventDefault();
     backspace();
+    return;
+  }
+  if (key === 'Delete' && state.cursorMode) {
+    event.preventDefault();
+    deleteForward();
     return;
   }
   if (key === 'Escape') {

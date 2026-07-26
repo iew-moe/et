@@ -125,12 +125,31 @@
     .math-line {
       min-height: 42px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
+      align-content: center;
       justify-content: flex-end;
       font-size: 1.24rem;
       line-height: 1.25;
       overflow-wrap: anywhere;
       text-align: right;
+      cursor: text;
+      user-select: none;
+    }
+
+    .math-line:focus-visible {
+      outline: 2px solid #315db6;
+      outline-offset: 2px;
+    }
+
+    .input-token {
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    .input-token.selected {
+      background: #315db6;
+      color: #fff;
     }
 
     .input-cursor {
@@ -391,7 +410,7 @@
             <span id="format-indicator">a+bi</span>
             <span id="cursor-mode-indicator" hidden>CURSOR</span>
           </div>
-          <div id="input-display" class="math-line"></div>
+          <div id="input-display" class="math-line" role="textbox" tabindex="0" aria-label="Rechenausdruck" data-i18n-aria="expressionAria"></div>
           <div id="result-display" class="result-line"></div>
           <div id="message-display" class="message-line"></div>
         </div>
@@ -487,7 +506,7 @@
           <button class="example-btn" data-example="(3-2i)*(5+6i)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleMultiply">Multiplikation komplexer Zahlen</button>
           <button class="example-btn" data-example="Arg(1+2i)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleArgument">Argument im Gradmaß bestimmen</button>
           <button class="example-btn" data-example="Abs(3+4i)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleMagnitude">Betrag bestimmen</button>
-          <button class="example-btn" data-example="1/(i*2*pi*50*10E-6)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleDivision">Division komplexer Zahlen</button>
+          <button class="example-btn" data-example="1/(i*2*pi*50*10^(-6))" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n="exampleDivision">Division komplexer Zahlen</button>
           <button class="example-btn" data-example="3*e^(-j*90°)" data-calc-mode="complex" data-angle-mode="deg" data-result-format="rect" data-i18n-html="exampleEuler">Eulerform 3·e<sup>−j·90°</sup></button>
         </div>
       </section>
