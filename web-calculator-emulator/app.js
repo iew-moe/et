@@ -319,7 +319,6 @@ function formatExprText(expr, cursorPosition = null) {
     .replaceAll('/', '÷')
     .replaceAll('pi', 'π')
     .replace(/Ans/gi, 'Ans')
-    .replaceAll('Abs', '|')
     .replaceAll('Conjg', 'Conjg')
     .replaceAll('Arg', 'Arg')
     .replace(/(^|[^A-Za-z])j(?=$|[^A-Za-z])/gi, '$1i')
