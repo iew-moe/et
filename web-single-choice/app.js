@@ -21,6 +21,8 @@ const I18N = {
     okRetry: 'Gelöst — zählt aber nicht als erster Versuch. Beim nächsten Durchgang kommt eine neue Frage zu diesem Thema.',
     revealed: 'Aufgedeckt (ohne Wertung).',
     status: 'Dieser Durchgang: {a} von {m} Fragen beantwortet, {n} richtig, davon {f} im ersten Versuch.',
+    tutorButton: 'KI-Tutor zu dieser Frage',
+    tutorAskGeneral: 'Ich brauche Hilfe bei „{q}“. Gib mir bitte einen Hinweis, ohne die richtige Option zu verraten.',
     tutorAsk: 'Ich habe bei „{q}“ die Option {sel} gewählt und das ist falsch. Gib mir bitte einen Hinweis, ohne die richtige Option zu verraten.',
     none: 'Keine der anderen Antwortmöglichkeiten ist korrekt.',
     noneFits: 'Keine der anderen Antwortmöglichkeiten trifft zu.',
@@ -61,6 +63,8 @@ const I18N = {
     okRetry: 'Solved — but not on the first attempt. The next run will present a new question for this topic.',
     revealed: 'Revealed (not counted).',
     status: 'This run: {a} of {m} questions answered, {n} correct, {f} of them on the first attempt.',
+    tutorButton: 'AI tutor for this question',
+    tutorAskGeneral: 'I need help with “{q}”. Please give me a hint without revealing the correct option.',
     tutorAsk: 'For “{q}” I chose option {sel} and it is wrong. Please give me a hint without revealing the correct option.',
     none: 'None of the other options is correct.',
     noneFits: 'None of the other options applies.',
@@ -944,7 +948,7 @@ function makeCase(seedText) {
       wrongShown: []
     };
   });
-  return { seed, picked };
+  return { seed, picked, activeQuestion: null };
 }
 
 function qData(item) {
@@ -1013,6 +1017,7 @@ function render(c) {
         `<input type="radio" name="q${k}" value="${shown}"> ${letter}) ${loc.opts[orig]}</label>`
       );
     });
+    parts.push(`<button type="button" class="question-tutor-button" data-question="${k}">${tr('tutorButton')}</button>`);
     parts.push(`<div class="expl" id="expl-${k}" style="display:none"></div>`);
     parts.push('</div>');
   });
@@ -1023,6 +1028,9 @@ function render(c) {
     document.querySelectorAll(`input[name="q${k}"]`).forEach((inp) => {
       inp.addEventListener('change', () => onAnswer(k, Number(inp.value)));
     });
+  });
+  document.querySelectorAll('.question-tutor-button').forEach((button) => {
+    button.addEventListener('click', () => openQuestionTutor(Number(button.dataset.question)));
   });
 
   updateQuestionBadges();
@@ -1047,6 +1055,27 @@ function showExplanation(k, kindText, extraClassOk) {
   explDiv.innerHTML =
     `<b>${kindText}</b> ${tr('correctAnswer')}: <b>${letter})</b> ${loc.opts[0]}<br>${loc.expl}`;
   explDiv.style.display = 'block';
+}
+
+function openQuestionTutor(k) {
+  if (!state || !state.picked[k]) return;
+  const item = state.picked[k];
+  const { loc } = qData(item);
+  const questionLabel = `${tr('questionWord')} ${k + 1}: ${stripHtml(loc.q)}`;
+  const lastWrong = item.wrongShown[item.wrongShown.length - 1];
+  const prefill = Number.isInteger(lastWrong)
+    ? tr('tutorAsk')
+      .replace('{q}', questionLabel)
+      .replace('{sel}', String.fromCharCode(97 + lastWrong))
+    : tr('tutorAskGeneral').replace('{q}', questionLabel);
+
+  state.activeQuestion = k;
+  const conversationKey = `single_choice:${state.seed}:${k}:${item.qi}:${item.vi}`;
+  const calculatorClose = document.querySelector('.et-calculator-panel:not([hidden]) .et-calculator-close');
+  if (calculatorClose) calculatorClose.click();
+  if (window.EtTutor && typeof window.EtTutor.open === 'function') {
+    window.EtTutor.open(prefill, conversationKey);
+  }
 }
 
 function onAnswer(k, shownIdx) {
@@ -1094,23 +1123,6 @@ function onAnswer(k, shownIdx) {
       renderTopicPanel();
       updateQuestionBadges();
     }
-    state.activeQuestion = k;
-    const { loc } = qData(item);
-    const letter = String.fromCharCode(97 + shownIdx);
-    // KI-Tutor oeffnen, ohne shared/tutor.js zu veraendern: Panel per Toggle-Klick
-    // einblenden und die Hilfebitte ins Eingabefeld vorbefuellen. Abgesendet wird
-    // bewusst von den Studierenden selbst; der vollstaendige Fragen-Kontext geht
-    // ohnehin ueber window.getEtTutorContext() an den Tutor.
-    const tutorPanel = document.querySelector('.et-tutor-panel');
-    const tutorToggle = document.querySelector('.et-tutor-toggle');
-    const tutorInput = document.querySelector('.et-tutor-input');
-    if (tutorPanel && tutorPanel.hidden && tutorToggle) tutorToggle.click();
-    if (tutorInput && item.wrongShown.length === 1) {
-      tutorInput.value = tr('tutorAsk')
-        .replace('{q}', `${tr('questionWord')} ${k + 1}: ${stripHtml(loc.q)}`)
-        .replace('{sel}', letter);
-      tutorInput.focus();
-    }
   }
   renderStatus();
 }
@@ -1127,7 +1139,13 @@ function showSolution() {
 }
 
 window.getEtTutorContext = function () {
-  const questions = state ? state.picked.map((item, k) => {
+  const activeIndex = state && Number.isInteger(state.activeQuestion)
+    ? state.activeQuestion
+    : null;
+  const activeItem = activeIndex !== null ? state.picked[activeIndex] : null;
+  const questions = activeItem ? [(() => {
+    const item = activeItem;
+    const k = activeIndex;
     const { q, loc } = qData(item);
     return {
       number: k + 1,
@@ -1144,29 +1162,28 @@ window.getEtTutorContext = function () {
       correctOptionForTutor: String.fromCharCode(97 + item.correctShown),
       explanationForTutor: stripHtml(loc.expl),
     };
-  }) : null;
+  })()] : [];
   return {
     exerciseId: 'single_choice',
     lang: LANG,
     seed: document.getElementById('seed')?.value || (state ? String(state.seed) : ''),
     title: tr('title'),
-    values: state ? {
-      numQuestions: state.picked.length,
-      topicsDone: TOPICS.filter(topicDone),
-      topicsOpen: TOPICS.filter((t) => !topicDone(t)),
-      topicCounts: Object.fromEntries(TOPICS.map((t) => [t, topicCount(t)])),
+    values: activeItem ? {
+      topicId: activeItem.topicId,
+      topicName: tr('topics')[activeItem.topicId] || activeItem.topicId,
     } : null,
-    activeQuestion: state && Number.isInteger(state.activeQuestion) ? state.activeQuestion + 1 : null,
+    activeQuestion: activeIndex !== null ? activeIndex + 1 : null,
     questions,
-    visibleValuesText: document.getElementById('values')?.innerText || '',
-    visibleTasksText: document.getElementById('tasks')?.innerText || '',
-    userInputs: state ? Object.fromEntries(state.picked.map((item, k) => {
-      const el = document.querySelector(`input[name="q${k}"]:checked`);
-      return [`q${k}`, el ? String.fromCharCode(97 + Number(el.value)) : ''];
-    })) : {},
-    checkResult: state ? {
-      percent: Math.round((state.picked.filter((it) => it.solvedFirstTry).length / state.picked.length) * 100),
-      fields: Object.fromEntries(state.picked.map((item, k) => [`q${k}`, item.solved])),
+    visibleValuesText: '',
+    visibleTasksText: '',
+    userInputs: activeItem ? {
+      [`q${activeIndex}`]: (() => {
+        const el = document.querySelector(`input[name="q${activeIndex}"]:checked`);
+        return el ? String.fromCharCode(97 + Number(el.value)) : '';
+      })(),
+    } : {},
+    checkResult: activeItem ? {
+      fields: { [`q${activeIndex}`]: activeItem.solved },
     } : null,
     formulaSheetUrl: '../Formelsammlung_ET1.html',
   };
@@ -1174,6 +1191,9 @@ window.getEtTutorContext = function () {
 
 function generate(mode = 'seed') {
   setLoadingTitle(true);
+  if (window.EtTutor && typeof window.EtTutor.reset === 'function') {
+    window.EtTutor.reset();
+  }
   let seed = '';
   if (mode === 'seed') seed = document.getElementById('seed').value || '';
   if (mode === 'random') seed = '';

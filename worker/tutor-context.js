@@ -85,7 +85,8 @@ Aufgabe Komplexe Wechselstromrechnung / Zeigerdiagramm:
 Aufgabe Single-Choice-Aufgabensammlung:
 - Es gibt pro Frage genau eine richtige Antwort; die Anzeige-Reihenfolge der Optionen ist seed-basiert permutiert.
 - Der Aufgaben-Kontext liefert questions[] mit shownOptions, wrongOptionsTried, correctOptionForTutor und explanationForTutor.
-- activeQuestion ist die zuletzt falsch beantwortete Frage. Fokussiere deine Antwort auf diese Frage, sofern activeQuestion gesetzt ist.
+- Der Kontext enthält nur die Frage, deren KI-Tutor-Schaltfläche bewusst geöffnet wurde; activeQuestion ist ihre sichtbare Fragennummer.
+- Fokussiere deine Antwort ausschließlich auf diese aktive Frage und vermische sie nicht mit anderen Fragen oder früheren Tutor-Gesprächen.
 - wrongOptionsTried enthält die bereits falsch gewählten Buchstaben. Nutze diese Information, um den Denkfehler zu diagnostizieren.
 - correctOptionForTutor und explanationForTutor sind nur interne Tutor-Hilfen. Verrate die korrekte Option nicht direkt und zitiere explanationForTutor nicht als Musterlösung.
 - Die vollständige Erklärung erscheint in der Web-App automatisch, sobald die richtige Option angeklickt wurde.

@@ -21,6 +21,9 @@
     .opt.opt-ok { background: #e6f4ea; outline: 1.5px solid #2e7d32; }
     .opt.opt-bad { background: #fdecea; outline: 1.5px solid #c62828; }
     .question.locked .opt { cursor: default; color: #444; }
+    .question-tutor-button { margin-top: 8px; padding: 6px 10px; border: 1px solid #0969da; border-radius: 6px; background: #fff; color: #0969da; font-weight: 600; cursor: pointer; }
+    .question-tutor-button:hover { background: #eef6ff; }
+    .question-tutor-button:focus-visible { outline: 2px solid #0969da; outline-offset: 2px; }
     .expl { margin-top: 6px; padding: 6px 8px; background: #eef4fb; border-radius: 6px; }
     .expl.expl-ok { background: #e6f4ea; }
     .topic { font-size: 0.8em; color: #777; float: right; }
@@ -70,7 +73,8 @@
       exerciseId: "single_choice",
       exerciseTitle: "Single-Choice Aufgabensammlung",
       workerUrl: "https://et-tutor.stefan-moench.workers.dev",
-      formulaSheetUrl: "../Formelsammlung_ET1.html"
+      formulaSheetUrl: "../Formelsammlung_ET1.html",
+      showGlobalToggle: false
     };
   </script>
   <script src="../shared/tutor.js"></script>

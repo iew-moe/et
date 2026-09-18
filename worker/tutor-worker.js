@@ -149,9 +149,9 @@ export default {
     ].join("\n");
 
     const anthropicBody = {
-      model: env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
+      model: env.ANTHROPIC_MODEL || "claude-sonnet-5",
       max_tokens: 700,
-      temperature: 0.2,
+      thinking: { type: "disabled" },
       system: systemPrompt(helpLevel, context),
       messages: [
         {

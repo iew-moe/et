@@ -34,6 +34,8 @@
 
   const history = [];
   let helpLevel = 0;
+  let activeConversationKey = null;
+  let conversationVersion = 0;
 
   function t(key) {
     return (text[lang()] && text[lang()][key]) || text.de[key] || key;
@@ -225,6 +227,7 @@
   }
 
   async function askTutor(message, messagesEl, statusEl, inputEl, sendButton) {
+    const requestVersion = conversationVersion;
     const workerUrl = cfg.workerUrl || "";
     if (!workerUrl || workerUrl.includes("YOUR_WORKER_URL")) {
       statusEl.textContent = t("setup");
@@ -252,14 +255,17 @@
       if (!response.ok) {
         throw new Error(data.error || `HTTP ${response.status}`);
       }
+      if (requestVersion !== conversationVersion) return;
       const answer = data.answer || t("error");
       addMessage(messagesEl, "assistant", answer);
       history.push({ role: "assistant", content: answer });
       helpLevel = Math.min(4, helpLevel + 1);
       statusEl.textContent = "";
     } catch (err) {
+      if (requestVersion !== conversationVersion) return;
       statusEl.textContent = `${t("error")} ${err.message || err}`;
     } finally {
+      if (requestVersion !== conversationVersion) return;
       sendButton.disabled = false;
       inputEl.focus();
     }
@@ -311,19 +317,57 @@
       if (message) askTutor(message, messages, status, input, send);
     });
 
+    function resetConversation() {
+      conversationVersion += 1;
+      history.length = 0;
+      helpLevel = 0;
+      messages.replaceChildren();
+      addMessage(messages, "assistant", t("intro"));
+      status.textContent = "";
+      input.value = "";
+      send.disabled = false;
+    }
+
+    function openTutor(prefill = "", conversationKey = null) {
+      const nextKey = conversationKey == null ? null : String(conversationKey);
+      const changedQuestion = nextKey !== null && nextKey !== activeConversationKey;
+      if (changedQuestion) {
+        activeConversationKey = nextKey;
+        resetConversation();
+      }
+      panel.hidden = false;
+      if (prefill && (changedQuestion || (history.length === 0 && !input.value.trim()))) {
+        input.value = prefill;
+      }
+      input.focus();
+    }
+
     toggle.addEventListener("click", () => {
-      panel.hidden = !panel.hidden;
-      if (!panel.hidden) input.focus();
+      if (panel.hidden) openTutor();
+      else panel.hidden = true;
     });
     close.addEventListener("click", () => {
       panel.hidden = true;
     });
 
     panel.append(header, messages, chips, status, form, resize);
-    root.append(toggle, panel);
+    if (cfg.showGlobalToggle !== false) root.appendChild(toggle);
+    root.appendChild(panel);
     document.body.appendChild(root);
     applySavedSize(root, panel);
     setupResize(root, panel, resize);
+
+    window.EtTutor = {
+      open: openTutor,
+      close() {
+        panel.hidden = true;
+      },
+      reset() {
+        activeConversationKey = null;
+        resetConversation();
+        panel.hidden = true;
+      },
+    };
   }
 
   if (document.readyState === "loading") {
